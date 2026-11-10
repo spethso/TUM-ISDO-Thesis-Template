@@ -1,0 +1,65 @@
+# Reusable workflow: builds the thesis or the exposé, checks the log, and uploads the PDF.
+# Used by build.yml (on every push) and by the manually triggered build-thesis.yml and
+# build-expose.yml.
+name: Build document
+
+on:
+  workflow_call:
+    inputs:
+      document:
+        description: "thesis or expose"
+        type: string
+        required: true
+      mode:
+        description: "draft or final"
+        type: string
+        default: draft
+
+jobs:
+  build:
+    name: ${{ inputs.document }} (${{ inputs.mode }})
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Switch document and mode in main.tex. Git ignores this edit, so the draft footer shows
+      # the commit without the "+" that marks uncommitted changes.
+      - name: Select the ${{ inputs.document }} (${{ inputs.mode }} version)
+        env:
+          DOCUMENT: ${{ inputs.document }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          case "$DOCUMENT" in thesis|expose) ;; *) echo "Unknown document: $DOCUMENT"; exit 1 ;; esac
+          case "$MODE" in draft|final) ;; *) echo "Unknown mode: $MODE"; exit 1 ;; esac
+          sed -i -E "s/^([[:space:]]*document[[:space:]]*=[[:space:]]*)[a-z]+/\1$DOCUMENT/" main.tex
+          sed -i -E "s/^([[:space:]]*mode[[:space:]]*=[[:space:]]*)[a-z]+/\1$MODE/" main.tex
+          git update-index --assume-unchanged main.tex
+
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+
+      - name: Check log for problems
+        run: ./scripts/check-log.sh main.log
+
+      # Upload the PDF even if the check found problems, so it can still be inspected.
+      - name: Name the PDF
+        if: ${{ !cancelled() && hashFiles('main.pdf') != '' }}
+        run: cp main.pdf "${{ inputs.document }}-${{ inputs.mode }}.pdf"
+
+      - name: Upload PDF
+        if: ${{ !cancelled() && hashFiles('main.pdf') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.document }}-${{ inputs.mode }}
+          path: ${{ inputs.document }}-${{ inputs.mode }}.pdf
+
+      - name: Summary
+        if: ${{ !cancelled() && hashFiles('main.pdf') != '' }}
+        run: |
+          {
+            echo "### ${{ inputs.document }} (${{ inputs.mode }} version)"
+            echo
+            echo "The PDF \`${{ inputs.document }}-${{ inputs.mode }}.pdf\` is available under **Artifacts** at the bottom of this page."
+          } >> "$GITHUB_STEP_SUMMARY"

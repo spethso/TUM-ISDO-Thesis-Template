@@ -101,8 +101,21 @@ resolve them. `make check` lists them.
 - overfull boxes that stick out more than 1pt, and
 - leftovers in the final version (TODO notes, template examples).
 
-The GitHub Action (`.github/workflows/build.yml`) builds both the thesis and the exposé on every
-push, runs the same check, fails if it finds problems, and provides both PDFs as artifacts.
+## Building the PDF on GitHub
+
+If your thesis is in a GitHub repository, GitHub Actions build it for you:
+
+- **On every push**, the workflow *Build and check PDF* builds the thesis and the exposé (draft
+  version), runs the same check as `make check`, and fails if it finds problems.
+- **On demand**, the workflows *Build thesis PDF* and *Build exposé PDF* build one document.
+  Open the **Actions** tab, select the workflow, click **Run workflow**, and choose the draft or
+  the final version.
+
+When a run has finished, download the PDF (e.g., `thesis-final.pdf`) from the **Artifacts**
+section at the bottom of the run's page. GitHub provides it as a ZIP file and keeps it for 90
+days; you need to be signed in to download it. The PDF is also uploaded if the check found
+problems (the run is then marked as failed), so you can still look at it. A final version is
+only clean once all TODO notes and template examples are removed.
 
 ## PDF/A
 
@@ -256,7 +269,7 @@ docs/                 Thesis checklist
 scripts/check-log.sh  Checks the log for errors, undefined references, overfull boxes, leftovers
 AGENTS.md, CLAUDE.md  Instructions for AI agents
 .latexmkrc, Makefile  Build configuration
-.github/workflows/    GitHub Action that builds and checks thesis and exposé on every push
+.github/workflows/    GitHub Actions that build and check thesis and exposé (on push or on demand)
 ```
 
 ## Credits and license

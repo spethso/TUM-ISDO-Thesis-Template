@@ -1,0 +1,21 @@
+# Manually triggered: Actions > "Build exposé PDF" > Run workflow. Choose draft or final version.
+# The PDF is available under "Artifacts" on the page of the workflow run.
+name: Build exposé PDF
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Version: draft (line numbers, TODO notes) or final (for submission)"
+        type: choice
+        options:
+          - draft
+          - final
+        default: draft
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-document.yml
+    with:
+      document: expose
+      mode: ${{ inputs.mode }}
