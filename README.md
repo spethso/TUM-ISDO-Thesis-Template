@@ -4,8 +4,10 @@ A clean LaTeX template for Bachelor's and Master's theses at the
 [TUM School of Computation, Information and Technology](https://www.cit.tum.de/) of the
 Technical University of Munich (TUM).
 
-> **Always check the current formatting requirements of your examination regulations and your
-> examiner before you hand in.**
+> **Unofficial template.** This is not an official template of TUM. It is not provided,
+> endorsed, or checked by TUM or its examination offices, and using it does not guarantee that
+> your thesis meets all formal requirements. **Always check the current requirements of your
+> examination regulations and your examiner before you hand in.**
 
 ## Quickstart
 
@@ -157,14 +159,17 @@ docs/                 Thesis checklist
 This template combines ideas from
 
 - the [TUM thesis template](https://github.com/fwalch/tum-thesis-latex) by Florian Walch and
-  contributors (CC BY-SA 4.0), and
+  contributors, and
 - the [scientific thesis template](https://github.com/latextemplates/scientific-thesis-template)
-  of the University of Stuttgart and contributors (0BSD), including the structure of the
-  introduction, the chapter guidance, the declaration of AI use, the declaration text, and the
-  thesis checklist.
+  of the University of Stuttgart and contributors and its
+  [ISTE fork](https://github.com/ISTE-SQA/template-thesis), including the structure of the
+  chapters, the declaration of AI use, the declaration text, and the thesis checklist.
 
-The template is licensed under the
-[Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
-The license applies only to the template; there are no restrictions on your thesis.
-The TUM logo is a trademark of the Technical University of Munich and may only be used in
-accordance with the TUM corporate design guidelines.
+The template is licensed under the [BSD Zero Clause License (0BSD)](LICENSE): you may use,
+copy, modify, and distribute it for any purpose, without any conditions, and you do not need to
+keep a license notice in your thesis. The license applies only to the template; your thesis is
+entirely yours.
+
+**Exception:** The TUM logo (`logos/tum-logo.pdf`) is a trademark of the Technical University of
+Munich and is **not** covered by this license. It may only be used in accordance with the TUM
+corporate design guidelines, e.g., on theses written at TUM.
