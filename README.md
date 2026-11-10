@@ -1,8 +1,16 @@
-# LaTeX Template for Theses at TUM
+# LaTeX Template for Theses at TUM ISDO
 
-A clean LaTeX template for Bachelor's and Master's theses, and their exposés, at the
-[TUM School of Computation, Information and Technology](https://www.cit.tum.de/) of the
+A clean LaTeX template for Bachelor's and Master's theses, and their exposés, created for the
+[Chair of Information System Development and Operation (ISDO)](https://www.cs.cit.tum.de/en/isdo/start/)
+at the [TUM School of Computation, Information and Technology](https://www.cit.tum.de/) of the
 Technical University of Munich (TUM).
+
+The template is tailored to ISDO: the exposé follows the
+[structure required by the chair](https://www.cs.cit.tum.de/en/isdo/teaching/theses/), and the
+title page, chapter structure, and guidance reflect what the chair expects. The ISDO-specific
+parts are few and easy to change, so students and supervisors at **other chairs** can use the
+template as well. See [Using the template at another chair](#using-the-template-at-another-chair)
+for what to adapt.
 
 > **Unofficial template.** This is not an official template of TUM. It is not provided,
 > endorsed, or checked by TUM or its examination offices, and using it does not guarantee that
@@ -38,7 +46,7 @@ The same template produces both the exposé for your thesis and the thesis itsel
 Both share the title page data, `settings.tex`, `acronyms.tex`, and `bibliography.bib`, so you
 can reuse references and research questions from the exposé in the thesis.
 
-The exposé (3--4 pages) follows the structure required by the
+The exposé (3–4 pages) follows the structure required by the
 [Chair of Information System Development and Operation](https://www.cs.cit.tum.de/en/isdo/teaching/theses/):
 
 | Part | File |
@@ -53,6 +61,21 @@ The exposé (3--4 pages) follows the structure required by the
 
 The exposé has no abstract, table of contents, acknowledgments, list of acronyms, appendix, or
 declarations. Its sections, figures, and tables are numbered without chapter numbers.
+
+## Using the template at another chair
+
+These parts are specific to ISDO. Check them with your supervisor and adapt them to your chair:
+
+| What | Where | What to do |
+|------|-------|------------|
+| Chair, department, examiner, supervisors | `\TUMsetup{...}` in `main.tex` | Enter your chair and people. Remove `department` if you do not want it on the title page. |
+| Exposé structure and deadline | `expose/` | Adapt the sections to your chair's requirements. The hint in `expose/01-motivation.tex` mentions ISDO's length (3–4 pages) and deadline (six weeks after the first meeting). If your chair does not require an exposé, simply do not use `document = expose`. |
+| Chapter structure | `chapters/`, `main.tex` | The chapters follow a typical structure for theses that build and evaluate an artifact. Rename, merge, or remove chapters as agreed with your supervisor, and update the thesis structure at the end of the introduction. |
+| Declaration and AI use | `backmatter/` | Check the declaration text and the rules for documenting AI use against your examination regulations and your examiner's requirements. |
+| Rules for AI agents | `AGENTS.md` | Adapt to the AI use your examiner allows. |
+
+Everything else (title page layout, draft/final mode, checks, PDF/A, acronyms, references,
+English/German) is independent of the chair.
 
 ## Draft or final version
 
