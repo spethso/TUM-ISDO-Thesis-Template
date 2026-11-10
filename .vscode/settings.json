@@ -1,0 +1,6 @@
+{
+  "latex-workshop.latex.recipe.default": "latexmk (latexmkrc)",
+  "latex-workshop.latex.rootFile.useSubFile": false,
+  "ltex.language": "en-US",
+  "files.encoding": "utf8"
+}

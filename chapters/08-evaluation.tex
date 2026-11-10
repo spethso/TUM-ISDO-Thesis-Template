@@ -1,0 +1,98 @@
+% !TeX root = ../main.tex
+% =================================================================================
+\chapter{Evaluation}\label{chap:evaluation}
+% =================================================================================
+
+This chapter evaluates our approach (contribution \refC{evaluation}).
+First, \cref{sec:evaluation:gqm} introduces the evaluation plan using the \gls{gqm} approach.
+\Cref{sec:evaluation:design} describes the study design, and \cref{sec:evaluation:results} presents the results.
+\Cref{sec:evaluation:discussion} discusses the results with respect to our research questions, and \cref{sec:evaluation:threats} discusses threats to validity.
+
+% ---------------------------------------------------------------------------------
+\section{Goal-Question-Metric Plan}\label{sec:evaluation:gqm}
+% ---------------------------------------------------------------------------------
+
+The evaluation is structured according to the \gls{gqm} approach~\cite{Basili1994}.
+Each goal is broken down into questions that tell whether the goal is reached, and each question into metrics that answer it.
+Derive the goals from your research questions and requirements, for example:
+
+\begin{description}[leftmargin=2.5em, labelindent=0pt, font=\normalfont]
+  \item[$\boldsymbol{G}_1$] Improve the usability of \ldots for \ldots
+  \begin{description}[leftmargin=2.5em, labelindent=0pt, font=\normalfont]
+    \item[$\boldsymbol{Q}_{1,1}$] Does our approach achieve a higher usability than the baseline?
+    \begin{description}[leftmargin=3em, labelindent=0pt, font=\normalfont]
+      \item[$\boldsymbol{M}_{1,1,1}$] The System Usability Scale score (0--100) of both tools, collected from $n$ participants.
+            Hypothesis $H_{A,1}$: the score of our approach is higher than the score of the baseline.
+    \end{description}
+    \item[$\boldsymbol{Q}_{1,2}$] Do users complete tasks faster with our approach?
+    \begin{description}[leftmargin=3em, labelindent=0pt, font=\normalfont]
+      \item[$\boldsymbol{M}_{1,2,1}$] Task completion time in minutes.
+    \end{description}
+  \end{description}
+  \item[$\boldsymbol{G}_2$] \ldots
+\end{description}
+
+% ---------------------------------------------------------------------------------
+\section{Study Design}\label{sec:evaluation:design}
+% ---------------------------------------------------------------------------------
+
+Describe the setup of your evaluation so that others can reproduce it:
+the case studies, data, or tasks you use; the participants and how you recruited them; the procedure; the hardware and software; and how you analyze the data (e.g., which statistical tests).
+Publish your data and scripts as a replication package and reference it here.
+
+% ---------------------------------------------------------------------------------
+\section{Results}\label{sec:evaluation:results}
+% ---------------------------------------------------------------------------------
+
+Report the results for each metric without interpreting them yet.
+Reference every table and figure in the text and describe what it shows, e.g., \enquote{\Cref{tab:evaluation:results} shows the runtime of both approaches.}
+Move extensive details to the appendix.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Runtime of the approaches (example data)}
+  \label{tab:evaluation:results}
+  \begin{tabular}{@{}l S[table-format=3.1] S[table-format=2.1] S[table-format=1.2]@{}}
+    \toprule
+    Approach & {Mean runtime (\unit{\milli\second})} & {SD (\unit{\milli\second})} & {Speedup} \\
+    \midrule
+    Baseline      & 120.4 & 12.3 & 1.00 \\
+    Our approach  &  48.7 &  5.1 & 2.47 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ---------------------------------------------------------------------------------
+\section{Discussion}\label{sec:evaluation:discussion}
+% ---------------------------------------------------------------------------------
+
+In this section, we discuss our research questions, taking the results of all parts of the evaluation into account.
+Answer each research question explicitly, based on the metrics of \cref{sec:evaluation:gqm}, and summarize the key insights as findings.
+
+\discussRQ{detect}
+
+Discuss the results that answer the first research question and refer to the metrics, e.g., $\boldsymbol{M}_{1,1,1}$.
+Interpret them: What do they mean, and why did you obtain them?
+
+\finding[finding:faster]{Our approach detects modifications 2.5 times faster than the baseline.}
+
+Continue the discussion and summarize further insights as findings, which you can reference later, e.g., \cref{finding:faster}.
+
+\discussRQ{resolve}
+
+Proceed in the same way for every research question.
+
+\finding{Users resolve conflicts with our approach in less time than with the baseline.}
+
+% ---------------------------------------------------------------------------------
+\section{Threats to Validity}\label{sec:evaluation:threats}
+% ---------------------------------------------------------------------------------
+
+Discuss what limits the validity of your results and how you mitigated it:
+\begin{description}
+  \item[Construct validity] Do your metrics capture what you intended to evaluate?
+  \item[Internal validity] Are the results caused by your approach, or by other factors?
+  \item[External validity] To which other settings, data, or participants do the results generalize?
+  \item[Reliability] Would other researchers obtain the same results with your replication package?
+\end{description}
+\textcite{Runeson2009} provide a checklist for such threats in software engineering case studies.

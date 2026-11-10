@@ -1,0 +1,67 @@
+% !TeX root = ../main.tex
+% =================================================================================
+\chapter{Introduction}\label{chap:introduction}
+% =================================================================================
+% The introduction summarizes your entire thesis. A reader must understand the context, the
+% problem, your goal and research questions, your approach, your results, and your contributions
+% from the introduction alone. Write it last, but collect notes for it from the beginning.
+% The introduction usually has no sections, except for the unnumbered "Thesis Structure" at the end.
+
+% --- Context -----------------------------------------------------------------------
+Start with the context of your thesis.
+Introduce the general area your work belongs to and explain why it is relevant, ideally with concrete examples from practice or research.
+Introduce every term with a specific meaning in precise language that a fellow computer science student understands.
+Support your statements with references, e.g., to foundational work~\cite{Lamport1994}.
+
+% --- Problem -----------------------------------------------------------------------
+Next, describe the problem you address.
+Explain the limitations of existing approaches or tools and why they are not sufficient.
+Be concrete: Who is affected by the problem, and what are the consequences?
+At the end of these paragraphs, the reader should understand the gap between the current state and a desired state.
+
+% --- Goal and research questions ---------------------------------------------------
+Then, state the goal of your thesis and how it addresses this gap.
+Derive your research questions from the problem and state each of them where it naturally arises in your argument.
+For example: Our goal is to enable programs to cooperate safely when they modify the same files.
+To this end, a program first has to notice changes made by others, which leads to our first research question:
+%
+\defRQ{How can a program detect that another program modified a file it saves?}{detect}
+%
+Once a modification is detected, the user has to decide which changes to keep.
+We investigate how this decision can be supported, leading to our second research question:
+%
+\defRQ{How can users resolve conflicting modifications of a file?}{resolve}
+%
+Refer to research questions with \verb|\refRQ{label}|, e.g., \refRQ{detect}.
+
+% --- Approach and results ----------------------------------------------------------
+Briefly describe how you approach the research questions, e.g., which methodology you follow (\cref{chap:methodology}), how you elicit requirements, what you design and implement, and how you evaluate it.
+Then summarize your main results with concrete numbers, e.g., \enquote{In a user study with 12~participants, our approach achieves a System Usability Scale score of 81.2, compared to 31.2 for the baseline.}
+If you publish a replication package, mention it here.
+
+% --- Benefits and limitations ------------------------------------------------------
+State who benefits from your results (e.g., developers, end users, researchers) and how.
+Also name the most important limitations that remain for future work.
+
+% --- Contributions -----------------------------------------------------------------
+In summary, our core contributions are as follows:
+\begin{contributions}
+  \item A concept for \ldots\label{c:concept}
+  \item An open-source implementation of \ldots, available at \url{https://github.com/...}.\label{c:implementation}
+  \item An evaluation of \ldots through a user study with \ldots participants.\label{c:evaluation}
+\end{contributions}
+Refer to contributions with \verb|\refC{label}|, e.g., \refC{concept}, just like research questions.
+
+\section*{Thesis Structure}
+
+The remainder of this thesis is structured as follows:
+\begin{description}
+  \item[\Cref{chap:foundations} -- \nameref{chap:foundations}:] We introduce the concepts and technologies required for understanding this thesis.
+  \item[\Cref{chap:methodology} -- \nameref{chap:methodology}:] We describe the research methodology used in this thesis.
+  \item[\Cref{chap:related-work} -- \nameref{chap:related-work}:] We give an overview of related work and delimit our work from it.
+  \item[\Cref{chap:requirements} -- \nameref{chap:requirements}:] We describe the requirements for our approach and how we elicited them.
+  \item[\Cref{chap:concept} -- \nameref{chap:concept}:] We present our concept for \ldots
+  \item[\Cref{chap:implementation} -- \nameref{chap:implementation}:] We describe the architecture and selected implementation details.
+  \item[\Cref{chap:evaluation} -- \nameref{chap:evaluation}:] We evaluate our approach and answer the research questions.
+  \item[\Cref{chap:conclusion} -- \nameref{chap:conclusion}:] We conclude the thesis and outline future work.
+\end{description}

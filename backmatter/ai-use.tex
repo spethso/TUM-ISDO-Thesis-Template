@@ -1,0 +1,43 @@
+% !TeX root = ../main.tex
+% =================================================================================
+\addchap{\TUMlabel{ai-use}}\label{chap:ai-use}
+% =================================================================================
+% TODO: Document to what extent AI tools were used for generating significant parts of this
+% work. The declaration at the end of this thesis refers to this chapter.
+% - List every AI tool whose output (text, figures, code, translations, ...) you adopted, the model
+%   it used, the type of usage, and where the result is used in the thesis.
+% - Model: Tools such as Claude Code, ChatGPT, GitHub Copilot, or Cursor can run different models.
+%   State the exact model and version you used (e.g., "Claude Opus 5.5", "GPT-5"). If you used
+%   several models with the same tool, list each of them. For tools without a selectable model
+%   (e.g., DeepL), write "--".
+% - Using AI tools only for searching literature or spell checking does not need to be listed,
+%   unless your examiner requires it.
+% - Agree on the details with your supervisor and examiner.
+% - If you did not use any AI tools, replace the table with the sentence:
+%   "No AI tools were used in the preparation of this thesis."
+
+The following table lists all AI tools that were used in the preparation of this thesis, including the model used, the type of usage, and the location where their output was adopted.
+
+{\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.34\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}@{}}
+  \toprule
+  \textbf{AI Tool} & \textbf{Model} & \textbf{Type of Usage} & \textbf{Location} \\
+  \midrule
+  \endfirsthead
+  \multicolumn{4}{@{}l}{\small\itshape (continued from previous page)} \\
+  \toprule
+  \textbf{AI Tool} & \textbf{Model} & \textbf{Type of Usage} & \textbf{Location} \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{4}{r@{}}{\small\itshape (continued on next page)} \\
+  \endfoot
+  \bottomrule
+  \endlastfoot
+  % TODO: replace the examples with your own usage
+  DeepL          & --                & Translation of the abstract into German                & Kurzzusammen\-fassung \\
+  Grammarly      & --                & Grammar and style improvements                         & Whole thesis \\
+  Claude Code    & Claude Opus 5.5   & Generation of Python scripts for the evaluation figures & \Cref{fig:latex:plot} \\
+  GitHub Copilot & Claude Sonnet 5.5 & Code completion in the prototype implementation         & \Cref{chap:implementation} \\
+  ChatGPT        & GPT-5             & Rephrasing of text based on bullet points and a draft  & \Cref{chap:introduction} \\
+\end{longtable}}

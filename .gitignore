@@ -1,0 +1,41 @@
+# LaTeX build files
+*.aux
+*.acn
+*.acr
+*.alg
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.idx
+*.ilg
+*.ind
+*.ist
+*.loa
+*.lof
+*.log
+*.lol
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.synctex(busy)
+*.tdo
+*.toc
+*.xdy
+build/
+
+# Output (remove this line to commit the PDF)
+main.pdf
+
+# OS and editor files
+.DS_Store
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/

@@ -1,0 +1,283 @@
+% !TeX root = main.tex
+% =================================================================================
+% Preamble: packages and layout. Usually, you do not need to change anything here.
+% Thesis data (title, author, ...) is set in main.tex.
+% =================================================================================
+
+% ---------------------------------------------------------------------------------
+% Fonts: Palatino (text and math), Helvetica (headings), Inconsolata (code).
+% Works with pdfLaTeX (default) and LuaLaTeX.
+% ---------------------------------------------------------------------------------
+\usepackage{iftex}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage{newpxtext}
+  \usepackage{newpxmath}
+  \usepackage[scaled=0.90]{helvet}
+  \usepackage[varqu,varl,scaled=0.95]{zi4}
+\else
+  \usepackage{unicode-math}
+  \setmainfont{TeX Gyre Pagella}
+  \setsansfont{TeX Gyre Heros}[Scale=0.90]
+  \setmonofont{Inconsolatazi4}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Bold, Scale=0.95]
+  \setmathfont{TeX Gyre Pagella Math}
+\fi
+\linespread{1.05} % Palatino needs slightly more leading
+\usepackage[final]{microtype}
+
+% ---------------------------------------------------------------------------------
+% Colors, graphics, tables
+% ---------------------------------------------------------------------------------
+\PassOptionsToPackage{table,svgnames,dvipsnames}{xcolor}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\graphicspath{{figures/}{logos/}}
+\usepackage{booktabs}    % \toprule, \midrule, \bottomrule -- avoid vertical lines in tables
+\usepackage{tabularx}    % tables with a fixed total width
+\usepackage{longtable}   % tables spanning multiple pages
+\usepackage{multirow}    % cells spanning multiple rows
+\usepackage{makecell}    % line breaks in cells: \makecell{a\\b}
+\usepackage{siunitx}     % numbers and units: \num{12345.6}, \SI{3}{\milli\second}
+\sisetup{group-minimum-digits=4}
+\usepackage[labelfont=bf,font=small]{caption}
+\usepackage{subcaption}  % sub figures: subfigure environment
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{
+  compat=1.18,
+  cycle list={{TUMBlue,mark=*},{TUMAccentOrange,mark=square*},{TUMAccentGreen,mark=triangle*},{TUMSecondaryBlue2,mark=diamond*}},
+}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+% ---------------------------------------------------------------------------------
+% TUM title page, metadata, colors
+% ---------------------------------------------------------------------------------
+\usepackage{tumthesis}
+
+% ---------------------------------------------------------------------------------
+% Page layout and headings (KOMA-Script)
+% ---------------------------------------------------------------------------------
+\usepackage{scrlayer-scrpage}
+\clearpairofpagestyles
+\automark[section]{chapter}
+\ohead{\headmark}
+\ofoot*{\pagemark}
+\setkomafont{pageheadfoot}{\normalfont\sffamily\small\color{TUMDarkGray}}
+\setkomafont{pagenumber}{\normalfont\sffamily\small}
+\pagestyle{scrheadings}
+
+\setkomafont{disposition}{\normalcolor\sffamily\bfseries}
+\addtokomafont{chapter}{\color{TUMBlue}}
+\addtokomafont{chapterprefix}{\color{TUMBlue}}
+\setkomafont{descriptionlabel}{\normalfont\bfseries}
+\RedeclareSectionCommand[beforeskip=0pt,afterskip=1.5\baselineskip]{chapter}
+
+% Avoid widows and orphans
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+% ---------------------------------------------------------------------------------
+% Language-related
+% ---------------------------------------------------------------------------------
+\usepackage[autostyle=true]{csquotes} % \enquote{...}
+\babelhyphenation[english]{
+  data-base
+  time-stamp
+}
+
+% ---------------------------------------------------------------------------------
+% Source code: listings (no shell escape needed, works on Overleaf)
+% ---------------------------------------------------------------------------------
+\usepackage{scrhack} % lets listings and algorithm cooperate with KOMA-Script lists
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries\color{TUMBlue},
+  commentstyle=\color{TUMGray},
+  stringstyle=\color{TUMAccentOrange},
+  numbers=left,
+  numberstyle=\tiny\color{TUMGray},
+  numbersep=8pt,
+  frame=tb,
+  rulecolor=\color{TUMLightGray},
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  tabsize=2,
+  columns=fullflexible,
+  keepspaces=true,
+  upquote=true,
+  xleftmargin=2em,
+  framexleftmargin=1.5em,
+  literate={ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {ß}{{\ss}}1,
+}
+
+% ---------------------------------------------------------------------------------
+% Algorithms (pseudo code)
+% ---------------------------------------------------------------------------------
+\usepackage[chapter]{algorithm}
+\usepackage{algpseudocodex}
+
+% Names of listings and algorithms in English and German
+\makeatletter
+\addto\captionsenglish{%
+  \renewcommand*{\lstlistingname}{Listing}%
+  \renewcommand*{\lstlistlistingname}{List of Listings}%
+  \renewcommand*{\ALG@name}{Algorithm}%
+  \renewcommand*{\listalgorithmname}{List of Algorithms}%
+}
+\addto\captionsngerman{%
+  \renewcommand*{\lstlistingname}{Listing}%
+  \renewcommand*{\lstlistlistingname}{Verzeichnis der Listings}%
+  \renewcommand*{\ALG@name}{Algorithmus}%
+  \renewcommand*{\listalgorithmname}{Verzeichnis der Algorithmen}%
+}
+\makeatother
+
+% ---------------------------------------------------------------------------------
+% TODO notes. For the final version, use \usepackage[disable]{todonotes}.
+% ---------------------------------------------------------------------------------
+\setlength{\marginparwidth}{2cm}
+\usepackage[colorinlistoftodos,color=TUMAccentOrange!30,textsize=footnotesize]{todonotes}
+\setuptodonotes{bordercolor=TUMAccentOrange}
+
+% ---------------------------------------------------------------------------------
+% Bibliography (biblatex + biber)
+% ---------------------------------------------------------------------------------
+\usepackage[
+  backend=biber,
+  style=numeric-comp,   % or: alphabetic, authoryear
+  sorting=nyt,          % sort by name, year, title
+  maxbibnames=99,       % list all authors in the bibliography
+  maxcitenames=2,
+  giveninits=true,
+  uniquename=init,
+  doi=true,
+  url=true,
+  isbn=false,
+  eprint=false,
+  urldate=long,
+]{biblatex}
+\addbibresource{bibliography.bib}
+% Print a URL only if there is no DOI
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map[overwrite]{
+      \step[fieldsource=doi,final]
+      \step[fieldset=url,null]
+      \step[fieldset=urldate,null]
+    }
+  }
+}
+\usepackage{xurl} % allow line breaks in URLs everywhere
+
+% ---------------------------------------------------------------------------------
+% Hyperlinks and cross references (load late)
+% ---------------------------------------------------------------------------------
+\usepackage[hidelinks,unicode,bookmarksnumbered,pdfdisplaydoctitle]{hyperref}
+% For colored links in the digital version, replace "hidelinks" with:
+%   colorlinks, linkcolor=TUMSecondaryBlue2, citecolor=TUMBlue, urlcolor=TUMBlue
+\usepackage{bookmark}
+\usepackage[capitalise,nameinlink,noabbrev]{cleveref} % \cref{...} -> "Figure 2.1"
+\crefname{lstlisting}{Listing}{Listings}
+\Crefname{lstlisting}{Listing}{Listings}
+\crefname{algorithm}{Algorithm}{Algorithms}
+\Crefname{algorithm}{Algorithm}{Algorithms}
+
+% ---------------------------------------------------------------------------------
+% Acronyms: the list shows the page on which each acronym is introduced (first use).
+% ---------------------------------------------------------------------------------
+\usepackage[
+  acronym,            % separate list of acronyms
+  nomain,             % no main glossary
+  toc,                % list of acronyms in table of contents
+  translate=babel,
+  indexonlyfirst,     % only record the page of the first use
+  nopostdot,
+  nogroupskip,
+]{glossaries-extra}
+\setabbreviationstyle[acronym]{long-short} % first use: "long form (SHORT)", afterwards: "SHORT"
+\glssetcategoryattribute{acronym}{nohyperfirst}{true} % no link on first use (it is the definition)
+\makenoidxglossaries % sorting by LaTeX itself -- no external tool needed
+
+% Plain list: acronym, meaning, and dot leaders to the page of the first use (like the ToC)
+\newglossarystyle{tumacronyms}{%
+  \setglossarystyle{long}%
+  \renewenvironment{theglossary}%
+    {\setlength{\LTpre}{0pt}\setlength{\LTpost}{0pt}%
+     \begin{longtable}[l]{@{}p{0.15\textwidth}@{}p{0.85\textwidth}@{}}}%
+    {\end{longtable}}%
+  \renewcommand*{\glossaryheader}{}%
+  \renewcommand*{\glsgroupheading}[1]{}%
+  \renewcommand*{\glsgroupskip}{}%
+  \renewcommand*{\glossentry}[2]{%
+    \glsentryitem{##1}\glstarget{##1}{\glossentryname{##1}} &
+    \glossentrydesc{##1}\glspostdescription\TOCLineLeaderFill\makebox[1.6em][r]{##2}\tabularnewline}%
+  \renewcommand*{\subglossentry}[3]{\glossentry{##2}{##3}}%
+}
+\setglossarystyle{tumacronyms}
+
+\input{acronyms}
+
+% ---------------------------------------------------------------------------------
+% Lists with custom labels, e.g., \begin{enumerate}[label=(C\arabic*)]
+% ---------------------------------------------------------------------------------
+\usepackage{enumitem}
+
+% ---------------------------------------------------------------------------------
+% Research questions
+%   \defRQ{<question>}{<label>}  states a research question (indented, numbered)
+%   \refRQ{<label>}              references it: "RQ 1"
+%   \discussRQ{<label>}          repeats it as a heading, e.g., in the discussion
+% ---------------------------------------------------------------------------------
+\newcounter{researchquestion}
+\NewDocumentCommand{\defRQ}{m m}{%
+  \expandafter\gdef\csname tumrqtext@#2\endcsname{#1}%
+  \begin{list}{}{\setlength{\leftmargin}{2em}\setlength{\rightmargin}{2em}%
+                 \setlength{\topsep}{0.5\baselineskip}}%
+    \item[]\refstepcounter{researchquestion}\label{rq:#2}%
+      \textbf{RQ~\theresearchquestion:}~\enquote{#1}%
+  \end{list}}
+\NewDocumentCommand{\refRQ}{m}{\hyperref[rq:#1]{RQ~\ref*{rq:#1}}}
+\NewDocumentCommand{\discussRQ}{m}{%
+  \par\addvspace{0.5\baselineskip}%
+  \noindent\textbf{\refRQ{#1}:}~\emph{\csname tumrqtext@#1\endcsname}\par\nopagebreak}
+
+% ---------------------------------------------------------------------------------
+% Findings: \finding[<label>]{<text>} -> highlighted "Finding 1: <text>"
+% ---------------------------------------------------------------------------------
+\newcounter{finding}
+\NewDocumentCommand{\finding}{o +m}{%
+  \par\addvspace{0.5\baselineskip}%
+  \refstepcounter{finding}\IfValueT{#1}{\label{#1}}%
+  \noindent\hspace*{1.5em}{\color{TUMBlue}\vrule width 2pt}\hspace{0.8em}%
+  \parbox[c]{\dimexpr\linewidth-1.5em-2pt-0.8em\relax}{%
+    \strut\textbf{Finding~\thefinding:} #2\strut}%
+  \par\addvspace{0.5\baselineskip}}
+% ---------------------------------------------------------------------------------
+% Contributions
+%   \begin{contributions} \item ... \label{c:<label>} \end{contributions} -> (C1), (C2), ...
+%   \refC{<label>}  references a contribution: "C1"
+% ---------------------------------------------------------------------------------
+\newlist{contributions}{enumerate}{1}
+\setlist[contributions]{label=(C\arabic*), ref=C\arabic*, leftmargin=3em}
+\NewDocumentCommand{\refC}{m}{\hyperref[c:#1]{\ref*{c:#1}}}
+\crefname{contributionsi}{contribution}{contributions}
+\Crefname{contributionsi}{Contribution}{Contributions}
+
+\crefname{researchquestion}{RQ}{RQs}
+\Crefname{researchquestion}{RQ}{RQs}
+\crefname{finding}{Finding}{Findings}
+\Crefname{finding}{Finding}{Findings}
+
+% Abbreviations in the running text
+\usepackage{xspace}
+\newcommand{\eg}{e.g.,\xspace}
+\newcommand{\ie}{i.e.,\xspace}

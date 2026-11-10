@@ -1,0 +1,114 @@
+% !TeX program = pdflatex
+% !BIB program = biber
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+% =================================================================================
+% LaTeX template for theses at the Technical University of Munich (TUM)
+% Compile with pdfLaTeX (or LuaLaTeX) and Biber, e.g., `latexmk` (see README.md).
+% Look for "TODO" comments to adapt the template.
+% =================================================================================
+
+\documentclass[
+  paper=a4,
+  fontsize=11pt,
+  DIV=12,
+  oneside,            % TODO: for a printed, two-sided thesis use: twoside, BCOR=12mm
+  open=any,           % chapters may start on any page (use open=right for twoside)
+  parskip=half-,      % paragraphs separated by half a line instead of indentation
+  headsepline,
+  listof=totoc,       % lists of figures, tables, ... in the table of contents
+  bibliography=totoc, % bibliography in the table of contents
+  numbers=noenddot,
+  % TODO: thesis language. The LAST language is the main language.
+  %       English thesis: ngerman,english -- German thesis: english,ngerman
+  ngerman,english,
+]{scrbook}
+
+\usepackage{babel}
+\input{settings}
+
+% =================================================================================
+% TODO: thesis information
+% =================================================================================
+\TUMsetup{
+  type       = master,  % master | bachelor | or free text, e.g., {Guided Research}
+  title      = {The Title of Your Thesis},
+  title-de   = {Der Titel Ihrer Arbeit}, % use title-en instead for a German thesis
+  author     = {Your Name},
+  program    = {Informatics},
+  examiner   = {Prof.\ Dr.\ Ingo Weber},
+  supervisor = {Dr.\ Sandro Speth},
+  % supervisor = {Second Supervisor, M.Sc.}, % repeat for more supervisors -> "Supervisors"
+  start-date = {May 15, 2026},
+  end-date   = {November 15, 2026},
+  % Organizational unit shown on the title page
+  school     = {TUM School of Computation, Information and Technology},
+  department = {Department of Computer Science},
+  chair      = {Chair of Information System Development and Operation},
+  location   = {Munich},
+  % Signature line in the declaration. Use false for a version that is published, e.g., online.
+  signature  = true,
+}
+
+% Only compile selected chapters (speeds up writing); comment out for the full thesis.
+% \includeonly{chapters/01-introduction}
+
+\begin{document}
+
+% =================================================================================
+% Front matter
+% =================================================================================
+\frontmatter
+\pagenumbering{alph} % avoids duplicate page anchors for the title page
+\TUMtitlepage
+\pagenumbering{roman}
+
+\include{frontmatter/abstract}
+\include{frontmatter/kurzzusammenfassung}
+\include{frontmatter/acknowledgments} % TODO: optional -- remove if not wanted
+
+\microtypesetup{protrusion=false}
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+\listofalgorithms
+% TODO: remove lists you do not need (e.g., if you have no algorithms)
+\printnoidxglossary[type=\acronymtype,sort=letter]
+\microtypesetup{protrusion=true}
+
+% =================================================================================
+% Main content
+% =================================================================================
+\mainmatter
+
+\include{chapters/01-introduction}
+\include{chapters/02-foundations}
+\include{chapters/03-methodology}
+\include{chapters/04-related-work}
+\include{chapters/05-requirements}   % TODO: optional, depending on your thesis
+\include{chapters/06-concept}        % TODO: rename/split according to your approach
+\include{chapters/07-implementation}
+\include{chapters/08-evaluation}
+\include{chapters/09-conclusion}
+
+% =================================================================================
+% References
+% =================================================================================
+\printbibliography[heading=bibintoc]
+
+% =================================================================================
+% Appendix
+% =================================================================================
+\appendix
+\include{appendix/a-supplementary-material}
+\include{appendix/b-latex-examples} % TODO: remove before submission
+
+% =================================================================================
+% Declarations
+% =================================================================================
+\backmatter
+\include{backmatter/ai-use}
+\include{backmatter/declaration}
+
+\end{document}

@@ -1,0 +1,170 @@
+% !TeX root = ../main.tex
+% =================================================================================
+\chapter{LaTeX Examples}\label{chap:appendix:latex}
+% =================================================================================
+% TODO: This chapter shows how to use the template. Remove it (in main.tex) before submission.
+
+This chapter shows how to typeset common elements of a thesis with this template.
+Look at the source code of this chapter (\texttt{appendix/b-latex-examples.tex}) to see how it is done.
+
+% ---------------------------------------------------------------------------------
+\section{Cross References}\label{sec:latex:references}
+% ---------------------------------------------------------------------------------
+
+Use \verb|\cref{...}| to reference figures, tables, sections, etc.
+It adds the type automatically, e.g., \cref{fig:latex:plot}, \cref{tab:latex:comparison}, \cref{lst:latex:java}, \cref{alg:latex:euclid}, \cref{eq:latex:euler}, and \cref{chap:introduction}.
+Use \verb|\Cref{...}| at the beginning of a sentence.
+Several references are combined: \cref{fig:latex:plot,fig:latex:sub}.
+Use \verb|\refRQ{...}| for research questions defined with \verb|\defRQ{...}{...}|, e.g., \refRQ{resolve}.
+Label prefixes such as \texttt{fig:}, \texttt{tab:}, and \texttt{sec:} help you to keep track of your labels.
+
+% ---------------------------------------------------------------------------------
+\section{Citations}\label{sec:latex:citations}
+% ---------------------------------------------------------------------------------
+
+Cite with \verb|\cite{...}|~\cite{Lamport1994}, cite several works at once~\cite{Basili1994,Runeson2009}, and add page numbers~\cite[p.~42]{Lamport1994}.
+Use \verb|\textcite{...}| if the authors are part of the sentence: \textcite{Runeson2009} recommend \ldots.
+Manage your references with a reference manager such as JabRef or Zotero.
+For web pages, add the \texttt{urldate} field to state when you last visited them~\cite{ISDO}.
+
+% ---------------------------------------------------------------------------------
+\section{Acronyms}\label{sec:latex:acronyms}
+% ---------------------------------------------------------------------------------
+
+Define acronyms in \texttt{acronyms.tex} and use them with \verb|\gls{...}|.
+The first use prints the long form, e.g., \gls{uml}, all further uses only the short form: \gls{uml}.
+Use \verb|\glspl{...}| for the plural (\glspl{pdf}), \verb|\Gls{...}| at the beginning of a sentence, and \verb|\glsxtrlong{...}| for the long form only (\glsxtrlong{tum}).
+Only acronyms that are used appear in the list of acronyms, together with the page of their first use.
+Do not use \verb|\gls{...}| in the abstract, in headings, or in captions, as the first use would then be recorded there.
+
+% ---------------------------------------------------------------------------------
+\section{Figures}\label{sec:latex:figures}
+% ---------------------------------------------------------------------------------
+
+Put figures into the \texttt{figures} folder and include them with \verb|\includegraphics|.
+Prefer vector graphics (PDF, or TikZ as in \cref{fig:concept:overview}) over raster graphics.
+Captions of figures are placed below them.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{example-image-a}
+    \caption{First sub figure}\label{fig:latex:sub-a}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{example-image-b}
+    \caption{Second sub figure}\label{fig:latex:sub-b}
+  \end{subfigure}
+  \caption{Two figures side by side using the \texttt{subcaption} package.}
+  \label{fig:latex:sub}
+\end{figure}
+
+\Cref{fig:latex:sub-a} is a sub figure of \cref{fig:latex:sub}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+        width=0.75\textwidth,
+        height=5.5cm,
+        xlabel={Number of requests},
+        ylabel={Latency (\unit{\milli\second})},
+        legend pos=north west,
+        grid=major,
+        grid style={TUMLightGray},
+      ]
+      \addplot coordinates {(100,12) (200,18) (400,29) (800,52) (1600,101)};
+      \addlegendentry{Baseline}
+      \addplot coordinates {(100,10) (200,13) (400,17) (800,24) (1600,39)};
+      \addlegendentry{Your approach}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{A plot created with \texttt{pgfplots}. The data can also be read from a CSV file.}
+  \label{fig:latex:plot}
+\end{figure}
+
+% ---------------------------------------------------------------------------------
+\section{Tables}\label{sec:latex:tables}
+% ---------------------------------------------------------------------------------
+
+Use the \texttt{booktabs} rules and avoid vertical lines.
+Captions of tables are placed above them.
+Align numbers at the decimal separator with the \texttt{S} column type of \texttt{siunitx} (see \cref{tab:evaluation:results}).
+
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison of features using \texttt{tabularx}, which fills the given width.}
+  \label{tab:latex:comparison}
+  \begin{tabularx}{0.8\textwidth}{@{}Xccc@{}}
+    \toprule
+    Feature                & Tool A & Tool B & Your approach \\
+    \midrule
+    Detects modifications  & \cmark & \cmark & \cmark        \\
+    Resolves conflicts     & \xmark & \cmark & \cmark        \\
+    Works offline          & \xmark & \xmark & \cmark        \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ---------------------------------------------------------------------------------
+\section{Source Code and Algorithms}\label{sec:latex:code}
+% ---------------------------------------------------------------------------------
+
+\Cref{lst:latex:java} shows source code typeset with the \texttt{listings} package.
+Short code in the text is written with \verb|\lstinline|, e.g., \lstinline[language=Java]|String s = "Hello";|.
+To include a complete source file, use \verb|\lstinputlisting|.
+
+\begin{lstlisting}[language=Java, caption={A Java example}, label={lst:latex:java}, float=htbp]
+public class HelloWorld {
+  // Prints a greeting
+  public static void main(String[] args) {
+    System.out.println("Hello, TUM!");
+  }
+}
+\end{lstlisting}
+
+Pseudo code is typeset with the \texttt{algpseudocodex} package, see \cref{alg:latex:euclid}.
+
+\begin{algorithm}[htbp]
+  \caption{Euclid's algorithm}\label{alg:latex:euclid}
+  \begin{algorithmic}[1]
+    \Procedure{Euclid}{$a, b$}
+      \While{$b \neq 0$}
+        \State $r \gets a \bmod b$
+        \State $a \gets b$
+        \State $b \gets r$ \Comment{$b$ decreases in every iteration}
+      \EndWhile
+      \State \Return $a$
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+% ---------------------------------------------------------------------------------
+\section{Mathematics and Units}\label{sec:latex:math}
+% ---------------------------------------------------------------------------------
+
+Inline formulas are written as $a^2 + b^2 = c^2$; numbered equations as in \cref{eq:latex:euler}:
+\begin{equation}
+  e^{i\pi} + 1 = 0 \label{eq:latex:euler}
+\end{equation}
+Write numbers and units with \texttt{siunitx}: \num{1234567}, \qty{3.5}{\giga\byte}, \qty{20}{\percent}.
+
+% ---------------------------------------------------------------------------------
+\section{Quotes, Notes, and TODOs}\label{sec:latex:misc}
+% ---------------------------------------------------------------------------------
+
+Use \verb|\enquote{...}| for \enquote{quotation marks} that match the document language.
+Footnotes are added with \verb|\footnote{...}|.\footnote{This is a footnote.}
+Use \verb|\todo{...}| for notes to yourself.\todo{This is a TODO note.}
+\todo[inline]{Inline TODO notes are also possible. Use \texttt{\textbackslash usepackage[disable]\{todonotes\}} in \texttt{settings.tex} to hide all notes.}
+\Cref{fig:latex:missing} shows a placeholder for a figure that is not yet finished.
+
+\begin{figure}[htbp]
+  \centering
+  \missingfigure[figwidth=0.6\textwidth]{A figure that still has to be created.}
+  \caption{Placeholder for a missing figure}
+  \label{fig:latex:missing}
+\end{figure}

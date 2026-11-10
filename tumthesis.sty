@@ -1,0 +1,322 @@
+% tumthesis.sty -- title page, metadata, and declaration helpers for theses at the
+% Technical University of Munich (TUM).
+%
+% Usage (in the preamble):
+%
+%   \usepackage{tumthesis}
+%   \TUMsetup{
+%     type       = master,            % bachelor | master | <any free text>
+%     title      = {Title of the Thesis},
+%     title-de   = {Titel der Arbeit}, % second title in the other language (optional)
+%     author     = {Your Name},
+%     program    = {Informatics},
+%     examiner   = {Prof.\ Dr.\ Ingo Weber},
+%     supervisor = {Dr.\ Sandro Speth},
+%     supervisor = {Second Supervisor, M.Sc.},  % repeat the key for several supervisors
+%     start-date = {May 15, 2026},
+%     end-date   = {November 15, 2026},
+%   }
+%
+% In the document:
+%   \TUMtitlepage   typesets the title page
+%   \TUMsignature   typesets place, date, and signature line (used by the declaration)
+%   \TUMtitle, \TUMauthor, \TUMtype, \TUMtypeinsentence, ... return the stored values
+%   \TUMlabel{<key>} returns a label in the current document language (English or German)
+%
+% The package is part of the TUM thesis template and licensed like it (see README.md).
+
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesExplPackage{tumthesis}{2026-11-10}{1.0}
+  {Title page and declarations for TUM theses}
+
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{array}
+
+% ---------------------------------------------------------------------------------
+% TUM corporate design colors
+% ---------------------------------------------------------------------------------
+\definecolor{TUMBlue}{HTML}{0065BD}
+\definecolor{TUMSecondaryBlue}{HTML}{005293}
+\definecolor{TUMSecondaryBlue2}{HTML}{003359}
+\definecolor{TUMDarkGray}{HTML}{333333}
+\definecolor{TUMGray}{HTML}{808080}
+\definecolor{TUMLightGray}{HTML}{CCCCC6}
+\definecolor{TUMAccentGray}{HTML}{DAD7CB}
+\definecolor{TUMAccentOrange}{HTML}{E37222}
+\definecolor{TUMAccentGreen}{HTML}{A2AD00}
+\definecolor{TUMAccentLightBlue}{HTML}{98C6EA}
+\definecolor{TUMAccentBlue}{HTML}{64A0C8}
+
+% ---------------------------------------------------------------------------------
+% Labels in English and German
+% ---------------------------------------------------------------------------------
+\prop_const_from_keyval:Nn \c__tum_labels_english_prop
+  {
+    bachelor            = Bachelor's~Thesis ,
+    master              = Master's~Thesis ,
+    bachelor-sentence   = bachelor's~thesis ,
+    master-sentence     = master's~thesis ,
+    thesis-sentence     = thesis ,
+    program             = Course~of~Study ,
+    examiner            = Examiner ,
+    supervisor          = Supervisor ,
+    supervisors         = Supervisors ,
+    start-date          = Commenced ,
+    end-date            = Completed ,
+    signature           = Signature ,
+    place-date          = {Place,~Date} ,
+    declaration         = Declaration ,
+    ai-use              = Declaration~of~AI~Use ,
+    acknowledgments     = Acknowledgments ,
+  }
+\prop_const_from_keyval:Nn \c__tum_labels_german_prop
+  {
+    bachelor            = Bachelorarbeit ,
+    master              = Masterarbeit ,
+    bachelor-sentence   = Bachelorarbeit ,
+    master-sentence     = Masterarbeit ,
+    thesis-sentence     = Arbeit ,
+    program             = Studiengang ,
+    examiner            = Pr\"{u}fer:in ,
+    supervisor          = Betreuer:in ,
+    supervisors         = Betreuer:innen ,
+    start-date          = Beginn ,
+    end-date            = Abgabe ,
+    signature           = Unterschrift ,
+    place-date          = {Ort,~Datum} ,
+    declaration         = Erkl\"{a}rung ,
+    ai-use              = Erkl\"{a}rung~zur~Nutzung~von~KI ,
+    acknowledgments     = Danksagung ,
+  }
+
+% Maps babel's \languagename to one of the label sets above.
+\cs_new:Npn \__tum_language:
+  {
+    \cs_if_exist:NTF \languagename
+      {
+        \str_case_e:nnF { \languagename }
+          {
+            { ngerman }       { german }
+            { german }        { german }
+            { naustrian }     { german }
+            { austrian }      { german }
+            { nswissgerman }  { german }
+            { swissgerman }   { german }
+          }
+          { english }
+      }
+      { english }
+  }
+\cs_new:Npn \__tum_label:n #1
+  { \prop_item:cn { c__tum_labels_ \__tum_language: _prop } {#1} }
+
+\NewExpandableDocumentCommand \TUMlabel { m } { \__tum_label:n {#1} }
+
+% ---------------------------------------------------------------------------------
+% Metadata
+% ---------------------------------------------------------------------------------
+\tl_new:N \l__tum_type_tl
+\tl_new:N \l__tum_title_tl
+\tl_new:N \l__tum_titlesecond_tl
+\tl_new:N \l__tum_author_tl
+\tl_new:N \l__tum_program_tl
+\tl_new:N \l__tum_examiner_tl
+\tl_new:N \l__tum_startdate_tl
+\tl_new:N \l__tum_enddate_tl
+\tl_new:N \l__tum_university_tl
+\tl_new:N \l__tum_school_tl
+\tl_new:N \l__tum_department_tl
+\tl_new:N \l__tum_chair_tl
+\tl_new:N \l__tum_location_tl
+\tl_new:N \l__tum_logo_tl
+\seq_new:N \l__tum_supervisors_seq
+\bool_new:N \l__tum_signature_bool
+
+\keys_define:nn { tumthesis }
+  {
+    signature   .bool_set:N = \l__tum_signature_bool ,
+    signature   .initial:n = true ,
+    type        .tl_set:N = \l__tum_type_tl ,
+    type        .initial:n = master ,
+    title       .tl_set:N = \l__tum_title_tl ,
+    title-de    .tl_set:N = \l__tum_titlesecond_tl ,
+    title-en    .tl_set:N = \l__tum_titlesecond_tl ,
+    author      .tl_set:N = \l__tum_author_tl ,
+    program     .tl_set:N = \l__tum_program_tl ,
+    examiner    .tl_set:N = \l__tum_examiner_tl ,
+    supervisor  .code:n   = \seq_put_right:Nn \l__tum_supervisors_seq {#1} ,
+    start-date  .tl_set:N = \l__tum_startdate_tl ,
+    end-date    .tl_set:N = \l__tum_enddate_tl ,
+    university  .tl_set:N = \l__tum_university_tl ,
+    university  .initial:n = Technical~University~of~Munich ,
+    school      .tl_set:N = \l__tum_school_tl ,
+    school      .initial:n = {TUM~School~of~Computation,~Information~and~Technology} ,
+    department  .tl_set:N = \l__tum_department_tl ,
+    chair       .tl_set:N = \l__tum_chair_tl ,
+    location    .tl_set:N = \l__tum_location_tl ,
+    location    .initial:n = Munich ,
+    logo        .tl_set:N = \l__tum_logo_tl ,
+    logo        .initial:n = logos/tum-logo ,
+  }
+
+\NewDocumentCommand \TUMsetup { m } { \keys_set:nn { tumthesis } {#1} }
+
+% Getters
+\NewExpandableDocumentCommand \TUMtitle        { } { \l__tum_title_tl }
+\NewExpandableDocumentCommand \TUMsecondtitle  { } { \l__tum_titlesecond_tl }
+\NewExpandableDocumentCommand \TUMauthor       { } { \l__tum_author_tl }
+\NewExpandableDocumentCommand \TUMprogram      { } { \l__tum_program_tl }
+\NewExpandableDocumentCommand \TUMexaminer     { } { \l__tum_examiner_tl }
+\NewExpandableDocumentCommand \TUMstartdate    { } { \l__tum_startdate_tl }
+\NewExpandableDocumentCommand \TUMenddate      { } { \l__tum_enddate_tl }
+\NewExpandableDocumentCommand \TUMuniversity   { } { \l__tum_university_tl }
+\NewExpandableDocumentCommand \TUMschool       { } { \l__tum_school_tl }
+\NewExpandableDocumentCommand \TUMdepartment   { } { \l__tum_department_tl }
+\NewExpandableDocumentCommand \TUMchair        { } { \l__tum_chair_tl }
+\NewExpandableDocumentCommand \TUMlocation     { } { \l__tum_location_tl }
+\NewExpandableDocumentCommand \TUMlogo         { } { \l__tum_logo_tl }
+
+% "Master's Thesis" (or the free text given as type)
+\NewExpandableDocumentCommand \TUMtype { }
+  {
+    \str_case_e:nnF { \l__tum_type_tl }
+      {
+        { bachelor } { \__tum_label:n { bachelor } }
+        { master }   { \__tum_label:n { master } }
+      }
+      { \l__tum_type_tl }
+  }
+% "master's thesis", for use within a sentence (e.g., in the declaration)
+\NewExpandableDocumentCommand \TUMtypeinsentence { }
+  {
+    \str_case_e:nnF { \l__tum_type_tl }
+      {
+        { bachelor } { \__tum_label:n { bachelor-sentence } }
+        { master }   { \__tum_label:n { master-sentence } }
+      }
+      { \__tum_label:n { thesis-sentence } }
+  }
+
+% Supervisors, one per line, and the matching label (singular or plural)
+\NewDocumentCommand \TUMsupervisors { }
+  { \seq_use:Nn \l__tum_supervisors_seq { \\ } }
+\NewExpandableDocumentCommand \TUMsupervisorlabel { }
+  {
+    \int_compare:nNnTF { \seq_count:N \l__tum_supervisors_seq } > { 1 }
+      { \__tum_label:n { supervisors } }
+      { \__tum_label:n { supervisor } }
+  }
+
+% \TUMIfSetTF{<field>}{<true>}{<false>}: tests whether a field is non-empty.
+% <field> is one of: title, titlesecond, author, program, examiner, startdate, enddate,
+% university, school, department, chair, location, logo, supervisors
+\NewExpandableDocumentCommand \TUMIfSetTF { m +m +m }
+  {
+    \str_if_eq:nnTF {#1} { supervisors }
+      { \seq_if_empty:NTF \l__tum_supervisors_seq {#3} {#2} }
+      { \tl_if_empty:cTF { l__tum_ #1 _tl } {#3} {#2} }
+  }
+
+% \TUMIfSignatureTF{<true>}{<false>}: whether a signature line is printed (key "signature")
+\NewExpandableDocumentCommand \TUMIfSignatureTF { +m +m }
+  { \bool_if:NTF \l__tum_signature_bool {#1} {#2} }
+
+% PDF metadata
+\AtBeginDocument
+  {
+    \IfPackageLoadedT { hyperref }
+      {
+        \hypersetup
+          {
+            pdftitle   = { \l__tum_title_tl } ,
+            pdfauthor  = { \l__tum_author_tl } ,
+            pdfsubject = { \TUMtype } ,
+          }
+      }
+  }
+
+\ExplSyntaxOff
+
+% ---------------------------------------------------------------------------------
+% Title page
+% ---------------------------------------------------------------------------------
+\newcommand*{\TUMtitlepagefont}{\sffamily}
+\newcommand*{\TUMtitlepage}{%
+  \begin{titlepage}%
+    \setlength{\parskip}{0pt}%
+    \setlength{\parindent}{0pt}%
+    \TUMtitlepagefont
+    % --- header: institution on the left, TUM logo on the right
+    \begin{minipage}[b]{0.76\textwidth}
+      \raggedright\small\color{TUMBlue}%
+      \TUMIfSetTF{chair}{\textbf{\TUMchair}\\}{}%
+      \TUMIfSetTF{department}{\TUMdepartment\\}{}%
+      \TUMIfSetTF{school}{\TUMschool\\}{}%
+      \TUMuniversity
+    \end{minipage}%
+    \hfill
+    \IfFileExists{\TUMlogo.pdf}{\includegraphics[height=13mm]{\TUMlogo}}{}%
+    \par\vspace{4mm}%
+    {\color{TUMBlue}\rule{\textwidth}{0.6pt}}%
+    \par
+    \vspace*{\stretch{2}}%
+    % --- type, title, author
+    \begin{center}
+      {\Large\color{TUMDarkGray}\TUMtype\par}
+      \vspace{14mm}
+      {\huge\bfseries\color{TUMBlue}\TUMtitle\par}
+      \TUMIfSetTF{titlesecond}{%
+        \vspace{8mm}
+        {\Large\color{TUMDarkGray}\TUMsecondtitle\par}%
+      }{}%
+      \vspace{16mm}
+      {\Large\TUMauthor\par}
+    \end{center}
+    \vspace*{\stretch{3}}%
+    % --- details
+    \begin{center}
+      \begin{tabular}{@{}>{\bfseries}l@{\hspace{2em}}l@{}}
+        \TUMIfSetTF{program}{\TUMlabel{program}: & \TUMprogram \\}{}%
+        \TUMIfSetTF{examiner}{\TUMlabel{examiner}: & \TUMexaminer \\}{}%
+        \TUMIfSetTF{supervisors}{\TUMsupervisorlabel: &
+          \begin{tabular}[t]{@{}l@{}}\TUMsupervisors\end{tabular} \\}{}%
+        \TUMIfSetTF{startdate}{\TUMlabel{start-date}: & \TUMstartdate \\}{}%
+        \TUMIfSetTF{enddate}{\TUMlabel{end-date}: & \TUMenddate \\}{}%
+      \end{tabular}
+    \end{center}
+    \vspace*{\stretch{1}}%
+  \end{titlepage}%
+}
+
+% ---------------------------------------------------------------------------------
+% Place, date, and signature (for the declaration)
+%   signature = true:  place, date, and a signature line above the author's name
+%   signature = false: place, date, and the author's name only (for published versions)
+% ---------------------------------------------------------------------------------
+\newcommand*{\TUMsignature}{%
+  \par
+  \TUMIfSignatureTF{%
+    \vspace{20mm}%
+    \noindent
+    \begin{tabular}[t]{@{}p{0.42\textwidth}@{}}
+      \TUMlocation\TUMIfSetTF{enddate}{, \TUMenddate}{} \\[-0.6em]
+      \rule{0.42\textwidth}{0.4pt} \\
+      {\small\TUMlabel{place-date}}
+    \end{tabular}%
+    \hfill
+    \begin{tabular}[t]{@{}p{0.42\textwidth}@{}}
+      \mbox{} \\[-0.6em]
+      \rule{0.42\textwidth}{0.4pt} \\
+      {\small\TUMauthor}
+    \end{tabular}%
+  }{%
+    \vspace{10mm}%
+    \noindent
+    \TUMlocation\TUMIfSetTF{enddate}{, \TUMenddate}{}\par
+    \noindent\TUMauthor
+  }%
+  \par
+}
+
+\endinput

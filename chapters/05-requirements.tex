@@ -1,0 +1,50 @@
+% !TeX root = ../main.tex
+% =================================================================================
+\chapter{Requirements}\label{chap:requirements}
+% =================================================================================
+% TODO: This chapter is typical for theses that build an artifact. Remove or merge it if it does
+% not fit your thesis.
+
+\todo[inline]{\textbf{Optional chapter.}
+  A requirements chapter is typical for theses that design and build an artifact, such as a tool, a language, or a platform.
+  It may not make sense for your thesis, e.g., for an empirical study, a literature review, or a theoretical thesis.
+  In that case, remove it (in \texttt{main.tex} and the thesis structure in the introduction) or merge relevant parts into other chapters.
+  Discuss the structure of your thesis with your supervisor.}
+
+This chapter describes the requirements for our approach.
+\Cref{sec:requirements:elicitation} describes how we elicited them.
+\Cref{sec:requirements:functional,sec:requirements:non-functional} present the functional and non-functional requirements.
+
+% ---------------------------------------------------------------------------------
+\section{Elicitation Process}\label{sec:requirements:elicitation}
+% ---------------------------------------------------------------------------------
+
+Describe the sources of your requirements, e.g., stakeholder meetings, interviews with experts, analysis of an existing tool, or literature.
+For interviews, describe the participants, the interview guide (in the appendix, \cref{chap:appendix:supplementary}), and how you analyzed the answers.
+
+% ---------------------------------------------------------------------------------
+\section{Functional Requirements}\label{sec:requirements:functional}
+% ---------------------------------------------------------------------------------
+
+Give each requirement an identifier, so that you can refer to it in the concept, implementation, and evaluation, as in \cref{tab:requirements:functional}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Functional requirements (example)}
+  \label{tab:requirements:functional}
+  \begin{tabularx}{\textwidth}{@{}lXl@{}}
+    \toprule
+    ID   & Requirement & Source \\
+    \midrule
+    FR1  & The system shall detect modifications of a file by other programs. & Interview \\
+    FR2  & The system shall show conflicting modifications side by side. & Literature \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ---------------------------------------------------------------------------------
+\section{Non-Functional Requirements}\label{sec:requirements:non-functional}
+% ---------------------------------------------------------------------------------
+
+Describe quality requirements, such as usability, performance, scalability, or maintainability, in the same way (NFR1, NFR2, \ldots).
+Make them measurable where possible, so that you can evaluate them in \cref{chap:evaluation}.

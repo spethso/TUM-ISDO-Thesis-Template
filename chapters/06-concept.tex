@@ -1,0 +1,49 @@
+% !TeX root = ../main.tex
+% =================================================================================
+\chapter{Concept}\label{chap:concept}
+% =================================================================================
+% TODO: Rename this chapter to reflect your approach. Split it into several chapters if
+% necessary, e.g., one chapter per research question or per part of your concept.
+
+This chapter presents our concept for \ldots (contribution \refC{concept}), which addresses \refRQ{detect} and \refRQ{resolve}.
+\Cref{sec:concept:overview} gives an overview, and \cref{sec:concept:first,sec:concept:second} describe its parts in detail.
+
+% ---------------------------------------------------------------------------------
+\section{Overview}\label{sec:concept:overview}
+% ---------------------------------------------------------------------------------
+
+Give an overview of your concept before you go into detail, e.g., with a figure such as \cref{fig:concept:overview}.
+Reference every figure in the text and explain how to read it:
+Do not expect the reader to know what they should see in a figure.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+      node distance=1.2cm and 1.6cm,
+      box/.style={draw=TUMBlue, fill=TUMBlue!8, rounded corners, minimum width=2.6cm, minimum height=1cm, align=center, font=\sffamily\small},
+      arrow/.style={-{Stealth}, thick, TUMDarkGray},
+    ]
+    \node[box] (input) {Input};
+    \node[box, right=of input] (approach) {Your\\Approach};
+    \node[box, right=of approach] (output) {Output};
+    \draw[arrow] (input) -- (approach);
+    \draw[arrow] (approach) -- (output);
+  \end{tikzpicture}
+  \caption[Overview of the concept]{Overview of the concept. A caption must be understandable on its own.}
+  \label{fig:concept:overview}
+\end{figure}
+
+% ---------------------------------------------------------------------------------
+\section{First Part of the Concept}\label{sec:concept:first}
+% ---------------------------------------------------------------------------------
+
+Describe the first part of your concept.
+Explain your design decisions, the alternatives you considered, and why you chose this option.
+Refer to the requirements it fulfills, e.g., FR1 in \cref{tab:requirements:functional}.
+Use a running example to illustrate the concept.
+
+% ---------------------------------------------------------------------------------
+\section{Second Part of the Concept}\label{sec:concept:second}
+% ---------------------------------------------------------------------------------
+
+Proceed in the same way for the further parts of your concept.
