@@ -157,6 +157,14 @@ The citation style is set in `settings.tex` (`style=numeric-comp`; alternatives:
 | `\num{...}`, `\qty{...}{...}` | Numbers and units (`siunitx`) |
 | `\includeonly{chapters/...}` | Compile only selected chapters (in `main.tex`) |
 
+## Working with AI agents
+
+If you use AI agents such as Claude Code, GitHub Copilot, Cursor, or Codex, they read the
+instructions in [`AGENTS.md`](AGENTS.md) (`CLAUDE.md` imports it for Claude Code). The file
+describes the template's structure, build, and conventions, and asks agents to respect academic
+integrity: no invented references, data, or results, and documenting AI use in the declaration
+of AI use. Adapt it to the rules of your examiner, e.g., which AI use is allowed.
+
 ## Layout options
 
 In `main.tex`:
@@ -184,6 +192,7 @@ backmatter/           Declaration of AI use and declaration of independent work
 figures/              Your figures
 logos/                TUM logo
 docs/                 Thesis checklist
+AGENTS.md, CLAUDE.md  Instructions for AI agents
 .latexmkrc, Makefile  Build configuration
 .github/workflows/    GitHub Action that builds the PDF on every push
 ```
