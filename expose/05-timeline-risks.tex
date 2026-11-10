@@ -1,0 +1,54 @@
+% !TeX root = ../main.tex
+\section{Timeline \& Risks}\label{sec:expose:timeline}
+
+Present your timeline with its milestones, e.g., as a Gantt chart such as \cref{fig:expose:timeline}.
+Plan enough time for writing and for buffers.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{ganttchart}[
+      x unit=0.42cm,
+      y unit title=0.5cm,
+      y unit chart=0.5cm,
+      vgrid={*3{draw=none},{TUMLightGray}},
+      hgrid=false,
+      title/.style={draw=none, fill=none},
+      title label font=\sffamily\scriptsize,
+      bar/.append style={draw=TUMBlue, fill=TUMBlue!50},
+      bar height=0.55,
+      bar label font=\small,
+      milestone/.append style={draw=TUMAccentOrange, fill=TUMAccentOrange},
+      milestone label font=\small\itshape,
+      milestone height=0.6,
+    ]{1}{24}
+    \gantttitle{Month 1}{4} \gantttitle{Month 2}{4} \gantttitle{Month 3}{4}
+    \gantttitle{Month 4}{4} \gantttitle{Month 5}{4} \gantttitle{Month 6}{4} \\
+    \ganttbar{Literature review}{1}{4} \\
+    \ganttbar{Requirements}{3}{6} \\
+    \ganttbar{Concept}{5}{10} \\
+    \ganttbar{Implementation}{8}{16} \\
+    \ganttmilestone{Prototype finished}{16} \\
+    \ganttbar{Evaluation}{15}{20} \\
+    \ganttbar{Writing}{4}{24} \\
+    \ganttmilestone{Submission}{24}
+  \end{ganttchart}
+  \caption{Planned timeline of the thesis (one column per week)}
+  \label{fig:expose:timeline}
+\end{figure}
+
+Consider the risks that could endanger the success of your thesis, e.g., missing access to data or participants, technical problems, or dependencies on others.
+Estimate their likelihood and impact, and describe how you mitigate them, as in \cref{tab:expose:risks}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Risks and their mitigation (example)}
+  \label{tab:expose:risks}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.27\textwidth}llX@{}}
+    \toprule
+    Risk & Likelihood & Impact & Mitigation \\
+    \midrule
+    Too few participants for the user study & Medium & High & Recruit early via courses and the chair's network; fall back to an expert evaluation \\
+    The existing tool cannot be extended & Low & High & Analyze its architecture during the literature review; plan a standalone prototype as an alternative \\
+    \bottomrule
+  \end{tabularx}
+\end{table}

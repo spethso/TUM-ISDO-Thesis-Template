@@ -1,6 +1,6 @@
 # LaTeX Template for Theses at TUM
 
-A clean LaTeX template for Bachelor's and Master's theses at the
+A clean LaTeX template for Bachelor's and Master's theses, and their exposés, at the
 [TUM School of Computation, Information and Technology](https://www.cit.tum.de/) of the
 Technical University of Munich (TUM).
 
@@ -12,13 +12,45 @@ Technical University of Munich (TUM).
 ## Quickstart
 
 1. Copy this folder (or upload it as a ZIP to [Overleaf](https://www.overleaf.com/)).
-2. Set your thesis information in `main.tex` (`\TUMsetup{...}`).
+2. Set your thesis information in `main.tex` (`\TUMsetup{...}`), including whether you
+   write the exposé or the thesis (`document = expose` or `document = thesis`).
 3. Compile `main.tex` with **pdfLaTeX** (or LuaLaTeX) and **Biber**:
    - Command line: `latexmk` (or `make`), which produces `main.pdf`.
    - Overleaf: works out of the box (pdfLaTeX is the default compiler).
    - VS Code: install *LaTeX Workshop*; it uses the provided `.latexmkrc`.
 4. Search for `TODO` comments and follow them.
 5. Before you hand in, work through [`docs/thesis-checklist.md`](docs/thesis-checklist.md).
+
+## Exposé or thesis
+
+The same template produces both the exposé for your thesis and the thesis itself. Switch in
+`main.tex`:
+
+```latex
+\TUMsetup{
+  document = expose,  % or: thesis
+  ...
+}
+```
+
+Both share the title page data, `settings.tex`, `acronyms.tex`, and `bibliography.bib`, so you
+can reuse references and research questions from the exposé in the thesis.
+
+The exposé (3--4 pages) follows the structure required by the
+[Chair of Information System Development and Operation](https://www.cs.cit.tum.de/en/isdo/teaching/theses/):
+
+| Part | File |
+|------|------|
+| Title page ("Master's Thesis Exposé", without commenced/completed dates) | generated from `\TUMsetup{...}` |
+| 1 Motivation (problem, research gap, initial literature search, research questions) | `expose/01-motivation.tex` |
+| 2 Methodology | `expose/02-methodology.tex` |
+| 3 Planned Use of (Generative) AI | `expose/03-ai-use.tex` |
+| 4 Evaluation | `expose/04-evaluation.tex` |
+| 5 Timeline & Risks (with a Gantt chart and a risk table) | `expose/05-timeline-risks.tex` |
+| References, followed by the lists of figures and tables | `main.tex` |
+
+The exposé has no abstract, table of contents, acknowledgments, list of acronyms, appendix, or
+declarations. Its sections, figures, and tables are numbered without chapter numbers.
 
 ## Structure of the thesis
 
@@ -114,6 +146,7 @@ The citation style is set in `settings.tex` (`style=numeric-comp`; alternatives:
 
 | Command | Purpose |
 |---------|---------|
+| `\ifTUMexpose ... \else ... \fi` | Content only for the exposé or only for the thesis |
 | `\cref{label}`, `\Cref{label}` | Reference with type, e.g., "Figure 3.1" |
 | `\defRQ{question}{label}`, `\refRQ{label}` | State a research question in the introduction and reference it ("RQ 1") |
 | `\discussRQ{label}` | Repeat a research question as a heading, e.g., in the discussion |
@@ -143,6 +176,7 @@ settings.tex          Packages and layout
 tumthesis.sty         Title page, labels, colors, and signature block
 acronyms.tex          Acronyms
 bibliography.bib      References
+expose/               Exposé sections
 frontmatter/          Abstract, Kurzzusammenfassung, acknowledgments
 chapters/             Main chapters
 appendix/             Appendix chapters

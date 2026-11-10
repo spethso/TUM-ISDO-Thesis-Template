@@ -32,6 +32,8 @@
 % TODO: thesis information
 % =================================================================================
 \TUMsetup{
+  % TODO: switch between the exposé and the thesis here
+  document   = thesis,  % thesis | expose
   type       = master,  % master | bachelor | or free text, e.g., {Guided Research}
   title      = {The Title of Your Thesis},
   title-de   = {Der Titel Ihrer Arbeit}, % use title-en instead for a German thesis
@@ -40,8 +42,8 @@
   examiner   = {Prof.\ Dr.\ Ingo Weber},
   supervisor = {Dr.\ Sandro Speth},
   % supervisor = {Second Supervisor, M.Sc.}, % repeat for more supervisors -> "Supervisors"
-  start-date = {May 15, 2026},
-  end-date   = {November 15, 2026},
+  start-date = {May 15, 2026},       % not shown on the exposé
+  end-date   = {November 15, 2026},  % not shown on the exposé
   % Organizational unit shown on the title page
   school     = {TUM School of Computation, Information and Technology},
   department = {Department of Computer Science},
@@ -56,12 +58,40 @@
 
 \begin{document}
 
+\pagenumbering{alph} % avoids duplicate page anchors for the title page
+\TUMtitlepage
+
+\ifTUMexpose
+% #################################################################################
+% EXPOSÉ (document = expose) -- content in expose/
+% #################################################################################
+\mainmatter
+
+\input{expose/01-motivation}
+\input{expose/02-methodology}
+\input{expose/03-ai-use}
+\input{expose/04-evaluation}
+\input{expose/05-timeline-risks}
+
+\FloatBarrier % place all figures and tables before the references
+\printbibliography[heading=subbibliography]
+
+\microtypesetup{protrusion=false}
+\listoffigures
+\listoftables
+% \lstlistoflistings
+% \listofalgorithms
+\microtypesetup{protrusion=true}
+
+\else
+% #################################################################################
+% THESIS (document = thesis)
+% #################################################################################
+
 % =================================================================================
 % Front matter
 % =================================================================================
 \frontmatter
-\pagenumbering{alph} % avoids duplicate page anchors for the title page
-\TUMtitlepage
 \pagenumbering{roman}
 
 \include{frontmatter/abstract}
@@ -111,5 +141,7 @@
 \backmatter
 \include{backmatter/ai-use}
 \include{backmatter/declaration}
+
+\fi
 
 \end{document}

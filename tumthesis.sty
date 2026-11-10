@@ -5,6 +5,7 @@
 %
 %   \usepackage{tumthesis}
 %   \TUMsetup{
+%     document   = thesis,            % thesis | expose
 %     type       = master,            % bachelor | master | <any free text>
 %     title      = {Title of the Thesis},
 %     title-de   = {Titel der Arbeit}, % second title in the other language (optional)
@@ -18,7 +19,8 @@
 %   }
 %
 % In the document:
-%   \TUMtitlepage   typesets the title page
+%   \TUMtitlepage   typesets the title page (thesis or exposé)
+%   \ifTUMexpose ... \else ... \fi   distinguishes between exposé and thesis
 %   \TUMsignature   typesets place, date, and signature line (used by the declaration)
 %   \TUMtitle, \TUMauthor, \TUMtype, \TUMtypeinsentence, ... return the stored values
 %   \TUMlabel{<key>} returns a label in the current document language (English or German)
@@ -70,6 +72,8 @@
     declaration         = Declaration ,
     ai-use              = Declaration~of~AI~Use ,
     acknowledgments     = Acknowledgments ,
+    expose              = Expos\'{e} ,
+    expose-title        = { \TUMtype {} ~ Expos\'{e} } ,
   }
 \prop_const_from_keyval:Nn \c__tum_labels_german_prop
   {
@@ -89,6 +93,8 @@
     declaration         = Erkl\"{a}rung ,
     ai-use              = Erkl\"{a}rung~zur~Nutzung~von~KI ,
     acknowledgments     = Danksagung ,
+    expose              = Expos\'{e} ,
+    expose-title        = { Expos\'{e} ~ zur ~ \TUMtype } ,
   }
 
 % Maps babel's \languagename to one of the label sets above.
@@ -133,9 +139,14 @@
 \tl_new:N \l__tum_logo_tl
 \seq_new:N \l__tum_supervisors_seq
 \bool_new:N \l__tum_signature_bool
+\newif \ifTUMexpose
 
 \keys_define:nn { tumthesis }
   {
+    document    .choice: ,
+    document / thesis .code:n = \legacy_if_set_false:n { TUMexpose } ,
+    document / expose .code:n = \legacy_if_set_true:n { TUMexpose } ,
+    document    .initial:n = thesis ,
     signature   .bool_set:N = \l__tum_signature_bool ,
     signature   .initial:n = true ,
     type        .tl_set:N = \l__tum_type_tl ,
@@ -219,6 +230,10 @@
       { \tl_if_empty:cTF { l__tum_ #1 _tl } {#3} {#2} }
   }
 
+% \TUMIfExposeTF{<expose>}{<thesis>}: whether an exposé is typeset (key "document")
+\NewExpandableDocumentCommand \TUMIfExposeTF { +m +m }
+  { \legacy_if:nTF { TUMexpose } {#1} {#2} }
+
 % \TUMIfSignatureTF{<true>}{<false>}: whether a signature line is printed (key "signature")
 \NewExpandableDocumentCommand \TUMIfSignatureTF { +m +m }
   { \bool_if:NTF \l__tum_signature_bool {#1} {#2} }
@@ -232,7 +247,7 @@
           {
             pdftitle   = { \l__tum_title_tl } ,
             pdfauthor  = { \l__tum_author_tl } ,
-            pdfsubject = { \TUMtype } ,
+            pdfsubject = { \TUMtype \legacy_if:nT { TUMexpose } { ~ - ~ Expos\'e } } ,
           }
       }
   }
@@ -264,7 +279,7 @@
     \vspace*{\stretch{2}}%
     % --- type, title, author
     \begin{center}
-      {\Large\color{TUMDarkGray}\TUMtype\par}
+      {\Large\color{TUMDarkGray}\TUMIfExposeTF{\TUMlabel{expose-title}}{\TUMtype}\par}
       \vspace{14mm}
       {\huge\bfseries\color{TUMBlue}\TUMtitle\par}
       \TUMIfSetTF{titlesecond}{%
@@ -282,12 +297,30 @@
         \TUMIfSetTF{examiner}{\TUMlabel{examiner}: & \TUMexaminer \\}{}%
         \TUMIfSetTF{supervisors}{\TUMsupervisorlabel: &
           \begin{tabular}[t]{@{}l@{}}\TUMsupervisors\end{tabular} \\}{}%
-        \TUMIfSetTF{startdate}{\TUMlabel{start-date}: & \TUMstartdate \\}{}%
-        \TUMIfSetTF{enddate}{\TUMlabel{end-date}: & \TUMenddate \\}{}%
+        \TUMIfExposeTF{}{% no dates for an exposé
+          \TUMIfSetTF{startdate}{\TUMlabel{start-date}: & \TUMstartdate \\}{}%
+          \TUMIfSetTF{enddate}{\TUMlabel{end-date}: & \TUMenddate \\}{}%
+        }%
       \end{tabular}
     \end{center}
     \vspace*{\stretch{1}}%
   \end{titlepage}%
+}
+
+% ---------------------------------------------------------------------------------
+% Exposé layout: no chapters, so number sections, figures, tables, ... without chapter
+% prefix, and typeset the lists as sections (not as chapters on separate pages)
+% ---------------------------------------------------------------------------------
+\AtBeginDocument{%
+  \ifTUMexpose
+    \counterwithout{section}{chapter}%
+    \counterwithout{figure}{chapter}%
+    \counterwithout{table}{chapter}%
+    \counterwithout{equation}{chapter}%
+    \@ifundefined{c@algorithm}{}{\counterwithout{algorithm}{chapter}}%
+    \@ifundefined{KOMAoptions}{}{\KOMAoptions{listof=leveldown}}%
+    \@ifundefined{automark}{}{\automark{section}}%
+  \fi
 }
 
 % ---------------------------------------------------------------------------------
