@@ -6,6 +6,7 @@
 %   \usepackage{tumthesis}
 %   \TUMsetup{
 %     document   = thesis,            % thesis | expose
+%     mode       = draft,             % draft | final
 %     type       = master,            % bachelor | master | <any free text>
 %     title      = {Title of the Thesis},
 %     title-de   = {Titel der Arbeit}, % second title in the other language (optional)
@@ -21,6 +22,8 @@
 % In the document:
 %   \TUMtitlepage   typesets the title page (thesis or exposé)
 %   \ifTUMexpose ... \else ... \fi   distinguishes between exposé and thesis
+%   \ifTUMfinal ... \else ... \fi    distinguishes between final and draft version
+%   \TUMremovebeforesubmission{<what>} warns in final mode that <what> is still included
 %   \TUMsignature   typesets place, date, and signature line (used by the declaration)
 %   \TUMtitle, \TUMauthor, \TUMtype, \TUMtypeinsentence, ... return the stored values
 %   \TUMlabel{<key>} returns a label in the current document language (English or German)
@@ -33,6 +36,7 @@
   {Title page and declarations for TUM theses}
 
 \RequirePackage{graphicx}
+\PassOptionsToPackage{table,svgnames,dvipsnames}{xcolor}
 \RequirePackage{xcolor}
 \RequirePackage{array}
 
@@ -74,6 +78,8 @@
     acknowledgments     = Acknowledgments ,
     expose              = Expos\'{e} ,
     expose-title        = { \TUMtype {} ~ Expos\'{e} } ,
+    draft               = {Draft~of} ,
+    commit              = commit ,
   }
 \prop_const_from_keyval:Nn \c__tum_labels_german_prop
   {
@@ -95,6 +101,8 @@
     acknowledgments     = Danksagung ,
     expose              = Expos\'{e} ,
     expose-title        = { Expos\'{e} ~ zur ~ \TUMtype } ,
+    draft               = {Entwurf~vom} ,
+    commit              = Commit ,
   }
 
 % Maps babel's \languagename to one of the label sets above.
@@ -140,6 +148,7 @@
 \seq_new:N \l__tum_supervisors_seq
 \bool_new:N \l__tum_signature_bool
 \newif \ifTUMexpose
+\newif \ifTUMfinal
 
 \keys_define:nn { tumthesis }
   {
@@ -147,6 +156,10 @@
     document / thesis .code:n = \legacy_if_set_false:n { TUMexpose } ,
     document / expose .code:n = \legacy_if_set_true:n { TUMexpose } ,
     document    .initial:n = thesis ,
+    mode        .choice: ,
+    mode / draft .code:n = \legacy_if_set_false:n { TUMfinal } ,
+    mode / final .code:n = \legacy_if_set_true:n { TUMfinal } ,
+    mode        .initial:n = draft ,
     signature   .bool_set:N = \l__tum_signature_bool ,
     signature   .initial:n = true ,
     type        .tl_set:N = \l__tum_type_tl ,
@@ -230,6 +243,10 @@
       { \tl_if_empty:cTF { l__tum_ #1 _tl } {#3} {#2} }
   }
 
+% \TUMIfFinalTF{<final>}{<draft>}: whether the final version is typeset (key "mode")
+\NewExpandableDocumentCommand \TUMIfFinalTF { +m +m }
+  { \legacy_if:nTF { TUMfinal } {#1} {#2} }
+
 % \TUMIfExposeTF{<expose>}{<thesis>}: whether an exposé is typeset (key "document")
 \NewExpandableDocumentCommand \TUMIfExposeTF { +m +m }
   { \legacy_if:nTF { TUMexpose } {#1} {#2} }
@@ -305,6 +322,8 @@
     \end{center}
     \vspace*{\stretch{1}}%
   \end{titlepage}%
+  % Line numbers in the draft version (if lineno is loaded), starting after the title page
+  \ifTUMfinal\else\@ifundefined{linenumbers}{}{\linenumbers}\fi
 }
 
 % ---------------------------------------------------------------------------------
@@ -351,6 +370,27 @@
     \noindent\TUMauthor
   }%
   \par
+}
+
+% ---------------------------------------------------------------------------------
+% Draft and final version
+% ---------------------------------------------------------------------------------
+% Current git commit, written to gitinfo.tex by .latexmkrc (empty if not available)
+\providecommand*{\TUMgitcommit}{}
+\InputIfFileExists{gitinfo.tex}{}{}
+
+% Mark for the footer of the draft version: "Draft of <date>, commit <hash>"
+\newcommand*{\TUMdraftmark}{%
+  \TUMlabel{draft}~\today
+  \ifx\TUMgitcommit\@empty\else, \TUMlabel{commit}~\texttt{\TUMgitcommit}\fi
+}
+
+% Name of the file that is currently read, e.g., for warnings: "chapters/01-introduction.tex"
+\newcommand*{\TUMcurrentfile}{\ifx\CurrentFilePath\@empty\else\CurrentFilePath/\fi\CurrentFile}
+
+% \TUMremovebeforesubmission{<what>}: in the final version, warn that <what> is still included
+\newcommand*{\TUMremovebeforesubmission}[1]{%
+  \ifTUMfinal\PackageWarningNoLine{tumthesis}{#1 is still included in the final version}\fi
 }
 
 \endinput

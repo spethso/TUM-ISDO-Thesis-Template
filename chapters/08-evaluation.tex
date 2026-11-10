@@ -7,6 +7,7 @@ This chapter evaluates our approach (contribution \refC{evaluation}).
 First, \cref{sec:evaluation:gqm} introduces the evaluation plan using the \gls{gqm} approach.
 \Cref{sec:evaluation:design} describes the study design, and \cref{sec:evaluation:results} presents the results.
 \Cref{sec:evaluation:discussion} discusses the results with respect to our research questions, and \cref{sec:evaluation:threats} discusses threats to validity.
+Last, \cref{sec:evaluation:data-availability} describes where the data and artifacts of this thesis are available.
 
 % ---------------------------------------------------------------------------------
 \section{Goal-Question-Metric Plan}\label{sec:evaluation:gqm}
@@ -16,16 +17,16 @@ The evaluation is structured according to the \gls{gqm} approach~\cite{Basili199
 Each goal is broken down into questions that tell whether the goal is reached, and each question into metrics that answer it.
 Derive the goals from your research questions and requirements, for example:
 
-\begin{description}[leftmargin=2.5em, labelindent=0pt, font=\normalfont]
+\begin{description}[leftmargin=2.5em, font=\normalfont]
   \item[$\boldsymbol{G}_1$] Improve the usability of \ldots for \ldots
-  \begin{description}[leftmargin=2.5em, labelindent=0pt, font=\normalfont]
+  \begin{description}[leftmargin=2.5em, font=\normalfont]
     \item[$\boldsymbol{Q}_{1,1}$] Does our approach achieve a higher usability than the baseline?
-    \begin{description}[leftmargin=3em, labelindent=0pt, font=\normalfont]
+    \begin{description}[leftmargin=3em, font=\normalfont]
       \item[$\boldsymbol{M}_{1,1,1}$] The System Usability Scale score (0--100) of both tools, collected from $n$ participants.
             Hypothesis $H_{A,1}$: the score of our approach is higher than the score of the baseline.
     \end{description}
     \item[$\boldsymbol{Q}_{1,2}$] Do users complete tasks faster with our approach?
-    \begin{description}[leftmargin=3em, labelindent=0pt, font=\normalfont]
+    \begin{description}[leftmargin=3em, font=\normalfont]
       \item[$\boldsymbol{M}_{1,2,1}$] Task completion time in minutes.
     \end{description}
   \end{description}
@@ -96,3 +97,13 @@ Discuss what limits the validity of your results and how you mitigated it:
   \item[Reliability] Would other researchers obtain the same results with your replication package?
 \end{description}
 \textcite{Runeson2009} provide a checklist for such threats in software engineering case studies.
+
+% ---------------------------------------------------------------------------------
+\section{Data Availability}\label{sec:evaluation:data-availability}
+% ---------------------------------------------------------------------------------
+
+State where others can find the artifacts of your thesis, so that they can reproduce and build on your results.
+Publish a replication package that contains, e.g., the source code of your prototype, the raw and processed data, the analysis scripts, the questionnaires, and instructions on how to run everything.
+Archive it in a repository that assigns a DOI, such as Zenodo, add it to \texttt{bibliography.bib} (e.g., as a \texttt{@software} or \texttt{@dataset} entry), and cite it in this section.
+A GitHub repository alone is not sufficient, as it can change or disappear.
+If you cannot publish some data, e.g., because of personal data of participants or a non-disclosure agreement, explain which data is affected and why, and publish what you can, e.g., anonymized or aggregated data.

@@ -15,11 +15,13 @@ Technical University of Munich (TUM).
 2. Set your thesis information in `main.tex` (`\TUMsetup{...}`), including whether you
    write the exposé or the thesis (`document = expose` or `document = thesis`).
 3. Compile `main.tex` with **pdfLaTeX** (or LuaLaTeX) and **Biber**:
-   - Command line: `latexmk` (or `make`), which produces `main.pdf`.
+   - Command line: `latexmk` (or `make`), which produces `main.pdf`. `make check` also checks
+     the log for problems (see below).
    - Overleaf: works out of the box (pdfLaTeX is the default compiler).
    - VS Code: install *LaTeX Workshop*; it uses the provided `.latexmkrc`.
 4. Search for `TODO` comments and follow them.
-5. Before you hand in, work through [`docs/thesis-checklist.md`](docs/thesis-checklist.md).
+5. Before you hand in, set `mode = final`, run `make check`, and work through
+   [`docs/thesis-checklist.md`](docs/thesis-checklist.md).
 
 ## Exposé or thesis
 
@@ -51,6 +53,41 @@ The exposé (3--4 pages) follows the structure required by the
 
 The exposé has no abstract, table of contents, acknowledgments, list of acronyms, appendix, or
 declarations. Its sections, figures, and tables are numbered without chapter numbers.
+
+## Draft or final version
+
+While you write, keep `mode = draft` in `\TUMsetup` (the default). The draft version
+
+- numbers the lines, so your supervisor can refer to them in feedback,
+- shows the date and the git commit in the footer ("Draft of November 10, 2026, commit 6ce8784"),
+  so feedback rounds cannot be mixed up (a `+` after the commit marks uncommitted changes;
+  without git, e.g., on Overleaf, only the date is shown), and
+- shows TODO notes and the hints of this template.
+
+For the version you submit, set `mode = final`. The final version hides line numbers, the
+draft mark, and all TODO notes. Every TODO note, missing figure, and the appendix *LaTeX
+Examples* that is still included is reported as a warning with its file and line, so you can
+resolve them. `make check` lists them.
+
+## Checking the document
+
+`make check` builds the document and runs `scripts/check-log.sh`, which reports
+
+- LaTeX errors,
+- undefined references and citations (`??` in the PDF),
+- overfull boxes that stick out more than 1pt, and
+- leftovers in the final version (TODO notes, template examples).
+
+The GitHub Action (`.github/workflows/build.yml`) builds both the thesis and the exposé on every
+push, runs the same check, fails if it finds problems, and provides both PDFs as artifacts.
+
+## PDF/A
+
+If your thesis is archived or published in a repository that requires PDF/A, remove the `%` in
+front of the `\DocumentMetadata{pdfstandard=a-2b, lang=en-US}` line at the top of `main.tex`
+(`lang=de-DE` for a German thesis). This requires LaTeX 2024 or newer. Check the result with a
+PDF/A validator such as [veraPDF](https://verapdf.org). Some packages are not compatible with
+`\DocumentMetadata` yet; if you add packages, build once with PDF/A enabled to check.
 
 ## Structure of the thesis
 
@@ -152,7 +189,8 @@ The citation style is set in `settings.tex` (`style=numeric-comp`; alternatives:
 | `\discussRQ{label}` | Repeat a research question as a heading, e.g., in the discussion |
 | `\finding[label]{text}` | Highlighted, numbered finding ("Finding 1: ...") |
 | `\begin{contributions} \item ... \label{c:label} \end{contributions}`, `\refC{label}` | List of contributions (C1), (C2), ... and reference to one ("C1") |
-| `\todo{...}`, `\todo[inline]{...}`, `\missingfigure{...}` | Notes to yourself (`todonotes`); disable with `\usepackage[disable]{todonotes}` in `settings.tex` |
+| `\todo{...}`, `\todo[inline]{...}`, `\missingfigure{...}` | Notes to yourself (`todonotes`); hidden and reported as warnings with `mode = final` |
+| `\ifTUMfinal ... \else ... \fi` | Content only for the final or only for the draft version |
 | `\enquote{...}` | Quotation marks matching the language |
 | `\num{...}`, `\qty{...}{...}` | Numbers and units (`siunitx`) |
 | `\includeonly{chapters/...}` | Compile only selected chapters (in `main.tex`) |
@@ -192,9 +230,10 @@ backmatter/           Declaration of AI use and declaration of independent work
 figures/              Your figures
 logos/                TUM logo
 docs/                 Thesis checklist
+scripts/check-log.sh  Checks the log for errors, undefined references, overfull boxes, leftovers
 AGENTS.md, CLAUDE.md  Instructions for AI agents
 .latexmkrc, Makefile  Build configuration
-.github/workflows/    GitHub Action that builds the PDF on every push
+.github/workflows/    GitHub Action that builds and checks thesis and exposé on every push
 ```
 
 ## Credits and license

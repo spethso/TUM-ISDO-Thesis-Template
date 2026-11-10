@@ -33,6 +33,7 @@ A reader who opens the thesis anywhere and has ten minutes must find their way.
 - [ ] Every statement that is not your own has a citation; direct quotes are marked as such.
 - [ ] Bibliography entries are complete (authors, title, venue, year, DOI where available).
 - [ ] Every cited web page states when you last visited it (`urldate` field).
+- [ ] The data availability section states where the replication package (with DOI) is available.
 - [ ] The use of AI tools is documented in the *Declaration of AI Use*, including the exact model and version for tools such as Claude Code, ChatGPT, or GitHub Copilot.
 
 ## Figures, tables, and listings
@@ -43,12 +44,12 @@ A reader who opens the thesis anywhere and has ten minutes must find their way.
 
 ## Form
 
-- [ ] The PDF shows no `??` (undefined references or citations).
-- [ ] All TODO notes are resolved (`\usepackage[disable]{todonotes}` hides any leftovers).
+- [ ] `mode = final` is set in `main.tex`, and `make check` reports no problems (no errors, no `??`, no overfull boxes, no TODO notes or template examples left).
 - [ ] All hints and examples of this template are removed, including the appendix *LaTeX Examples*.
 - [ ] Unused lists (e.g., the list of algorithms) are removed from `main.tex`.
 - [ ] The text is spell-checked and grammar-checked, e.g., with LTeX+ in VS Code.
 - [ ] The title page is correct: title in English and German, your name, course of study, examiner, supervisors, dates.
 - [ ] The submitted PDF is signed as your examination office requires (e.g., digitally via the TUM Trust Center).
 - [ ] A version you publish uses `signature = false` and contains no image of your handwritten signature.
+- [ ] If required (e.g., for archiving or publication), the PDF is a valid PDF/A (see the README).
 - [ ] The formal requirements of your examination regulations are met (page limit, file format, submission via the portal).

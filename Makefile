@@ -1,8 +1,12 @@
 # Build the thesis with latexmk (pdfLaTeX + Biber)
-.PHONY: pdf lualatex watch clean purge
+.PHONY: pdf check lualatex watch clean purge
 
 pdf:
 	latexmk
+
+# Build and check the log for undefined references, overfull boxes, and leftovers
+check: pdf
+	./scripts/check-log.sh main.log
 
 lualatex:
 	latexmk -lualatex
@@ -15,3 +19,4 @@ clean:
 
 purge:
 	latexmk -C
+	rm -f gitinfo.tex

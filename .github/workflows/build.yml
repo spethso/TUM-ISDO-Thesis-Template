@@ -1,4 +1,4 @@
-name: Build PDF
+name: Build and check PDF
 
 on:
   push:
@@ -8,14 +8,27 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        document: [thesis, expose]
     steps:
       - uses: actions/checkout@v4
+
+      - name: Select the ${{ matrix.document }}
+        run: sed -i -E 's/^([[:space:]]*document[[:space:]]*=[[:space:]]*)[a-z]+/\1${{ matrix.document }}/' main.tex
+
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
+
+      - name: Check log for problems
+        run: ./scripts/check-log.sh main.log
+
       - name: Upload PDF
+        if: ${{ !cancelled() && hashFiles('main.pdf') != '' }}
         uses: actions/upload-artifact@v4
         with:
-          name: thesis
+          name: ${{ matrix.document }}
           path: main.pdf

@@ -1,7 +1,8 @@
 % !TeX root = main.tex
 % =================================================================================
 % Preamble: packages and layout. Usually, you do not need to change anything here.
-% Thesis data (title, author, ...) is set in main.tex.
+% Thesis data (title, author, ...) and the switches (thesis/exposé, draft/final) are set in
+% main.tex, before this file is loaded.
 % =================================================================================
 
 % ---------------------------------------------------------------------------------
@@ -27,11 +28,16 @@
 \linespread{1.05} % Palatino needs slightly more leading
 \usepackage[final]{microtype}
 
+% Line numbers in the draft version (started after the title page by \TUMtitlepage)
+\ifTUMfinal\else
+  \usepackage{lineno}
+  \renewcommand*{\linenumberfont}{\normalfont\tiny\sffamily\color{TUMGray}}
+\fi
+
 % ---------------------------------------------------------------------------------
 % Colors, graphics, tables
 % ---------------------------------------------------------------------------------
-\PassOptionsToPackage{table,svgnames,dvipsnames}{xcolor}
-\usepackage{xcolor}
+\usepackage{xcolor} % options and TUM colors: see tumthesis.sty
 \usepackage{graphicx}
 \graphicspath{{figures/}{logos/}}
 \usepackage{booktabs}    % \toprule, \midrule, \bottomrule -- avoid vertical lines in tables
@@ -57,11 +63,6 @@
 \newcommand{\xmark}{\ding{55}}
 
 % ---------------------------------------------------------------------------------
-% TUM title page, metadata, colors
-% ---------------------------------------------------------------------------------
-\usepackage{tumthesis}
-
-% ---------------------------------------------------------------------------------
 % Page layout and headings (KOMA-Script)
 % ---------------------------------------------------------------------------------
 \usepackage{scrlayer-scrpage}
@@ -69,6 +70,10 @@
 \automark[section]{chapter}
 \ohead{\headmark}
 \ofoot*{\pagemark}
+% Draft version: date and git commit in the footer, so feedback rounds can be told apart
+\ifTUMfinal\else
+  \ifoot*{\textcolor{TUMGray}{\TUMdraftmark}}
+\fi
 \setkomafont{pageheadfoot}{\normalfont\sffamily\small\color{TUMDarkGray}}
 \setkomafont{pagenumber}{\normalfont\sffamily\small}
 \pagestyle{scrheadings}
@@ -125,7 +130,7 @@
 % Algorithms (pseudo code)
 % ---------------------------------------------------------------------------------
 \usepackage[chapter]{algorithm}
-\usepackage{algpseudocodex}
+\usepackage{algpseudocode}
 
 % Names of listings and algorithms in English and German
 \makeatletter
@@ -144,11 +149,21 @@
 \makeatother
 
 % ---------------------------------------------------------------------------------
-% TODO notes. For the final version, use \usepackage[disable]{todonotes}.
+% TODO notes and line numbers
+% Draft version (mode = draft): TODO notes and template hints are shown, lines are numbered.
+% Final version (mode = final): TODO notes are hidden, and every remaining one is reported as
+% a warning ("TODO note left in the final version"), so you can find and resolve it.
 % ---------------------------------------------------------------------------------
 \setlength{\marginparwidth}{2cm}
 \usepackage[colorinlistoftodos,color=TUMAccentOrange!30,textsize=footnotesize]{todonotes}
 \setuptodonotes{bordercolor=TUMAccentOrange}
+\ifTUMfinal
+  \RenewDocumentCommand{\todo}{O{} +m}{%
+    \PackageWarning{tumthesis}{TODO note left in the final version (\TUMcurrentfile)}\ignorespaces}
+  \RenewDocumentCommand{\missingfigure}{O{} +m}{%
+    \PackageWarning{tumthesis}{Missing figure left in the final version (\TUMcurrentfile)}\ignorespaces}
+  \RenewDocumentCommand{\listoftodos}{o}{}
+\fi
 
 % ---------------------------------------------------------------------------------
 % Bibliography (biblatex + biber)
@@ -268,11 +283,17 @@
 %   \begin{contributions} \item ... \label{c:<label>} \end{contributions} -> (C1), (C2), ...
 %   \refC{<label>}  references a contribution: "C1"
 % ---------------------------------------------------------------------------------
-\newlist{contributions}{enumerate}{1}
-\setlist[contributions]{label=(C\arabic*), ref=C\arabic*, leftmargin=3em}
+\newcounter{contribution}
+\renewcommand*{\thecontribution}{C\arabic{contribution}}
+\newenvironment{contributions}
+  {\begin{list}{(\thecontribution)}{%
+     \usecounter{contribution}%
+     \setlength{\leftmargin}{3em}%
+     \setlength{\labelwidth}{\dimexpr\leftmargin-\labelsep\relax}}}
+  {\end{list}}
 \NewDocumentCommand{\refC}{m}{\hyperref[c:#1]{\ref*{c:#1}}}
-\crefname{contributionsi}{contribution}{contributions}
-\Crefname{contributionsi}{Contribution}{Contributions}
+\crefname{contribution}{contribution}{contributions}
+\Crefname{contribution}{Contribution}{Contributions}
 
 \crefname{researchquestion}{RQ}{RQs}
 \Crefname{researchquestion}{RQ}{RQs}

@@ -9,6 +9,11 @@
 % Look for "TODO" comments to adapt the template.
 % =================================================================================
 
+% Optional: PDF/A-2b output, e.g., if your thesis is archived or published in a repository
+% that requires PDF/A. Remove the % at the beginning of the next line (use lang=de-DE for a
+% German thesis). Requires LaTeX 2024 or newer; check the result with a PDF/A validator.
+% \DocumentMetadata{pdfstandard=a-2b, lang=en-US}
+
 \documentclass[
   paper=a4,
   fontsize=11pt,
@@ -26,7 +31,7 @@
 ]{scrbook}
 
 \usepackage{babel}
-\input{settings}
+\usepackage{tumthesis}
 
 % =================================================================================
 % TODO: thesis information
@@ -34,6 +39,9 @@
 \TUMsetup{
   % TODO: switch between the exposé and the thesis here
   document   = thesis,  % thesis | expose
+  % draft: line numbers, date and commit in the footer, TODO notes and hints visible
+  % final: clean version for submission; leftover TODO notes are reported as warnings
+  mode       = draft,   % draft | final
   type       = master,  % master | bachelor | or free text, e.g., {Guided Research}
   title      = {The Title of Your Thesis},
   title-de   = {Der Titel Ihrer Arbeit}, % use title-en instead for a German thesis
@@ -52,6 +60,8 @@
   % Signature line in the declaration. Use false for a version that is published, e.g., online.
   signature  = true,
 }
+
+\input{settings}
 
 % Only compile selected chapters (speeds up writing); comment out for the full thesis.
 % \includeonly{chapters/01-introduction}

@@ -49,9 +49,16 @@ declaration that they wrote it independently. Therefore:
 
 - Build with `latexmk` (or `make`) in the repository root. This runs pdfLaTeX and Biber and
   produces `main.pdf`. LuaLaTeX also works: `latexmk -lualatex`.
-- After every change, build and check `main.log`: there must be no errors, no undefined
-  references or citations (`??` in the PDF), and no overfull boxes you introduced.
-- `make clean` removes auxiliary files. Do not commit build output (see `.gitignore`).
+- After every change, run `make check` (builds and runs `scripts/check-log.sh`). It must
+  report no errors, no undefined references or citations (`??` in the PDF), and no overfull
+  boxes you introduced.
+- `mode = draft` (default in `\TUMsetup`) shows line numbers, the draft date and commit, and
+  TODO notes. Do not switch to `mode = final` unless the student asks; in the final version,
+  every remaining TODO note is reported by `make check` and must be resolved.
+- PDF/A output is opt-in via the `\DocumentMetadata` line at the top of `main.tex`. When you add
+  packages, check that the document still builds with it enabled.
+- `make clean` removes auxiliary files. Do not commit build output or `gitinfo.tex`
+  (see `.gitignore`).
 
 ## Reviewing the thesis or exposé
 
@@ -175,6 +182,7 @@ contents, acknowledgments, acronym list, appendix, or declarations.
 
 ## Before submission
 
-Work through `docs/thesis-checklist.md` with the student. In particular: no `??`, no TODO
-notes, template hints and `appendix/b-latex-examples.tex` removed, declaration of AI use
-complete, and title page data correct.
+Work through `docs/thesis-checklist.md` with the student. In particular: `mode = final` and
+`make check` without problems (no `??`, no TODO notes, `appendix/b-latex-examples.tex`
+removed), declaration of AI use complete, data availability described, and title page data
+correct.
