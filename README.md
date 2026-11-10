@@ -68,7 +68,7 @@ These parts are specific to ISDO. Check them with your supervisor and adapt them
 
 | What | Where | What to do |
 |------|-------|------------|
-| Chair, department, examiner, supervisors | `\TUMsetup{...}` in `main.tex` | Enter your chair and people. Remove `department` if you do not want it on the title page. |
+| Chair, department, examiner, supervisors | `\TUMsetup{...}` in `main.tex`, `people.tex` | Enter your chair, and replace the ISDO members in `people.tex` with the people of your chair. Remove `department` if you do not want it on the title page. |
 | Exposé structure and deadline | `expose/` | Adapt the sections to your chair's requirements. The hint in `expose/01-motivation.tex` mentions ISDO's length (3–4 pages) and deadline (six weeks after the first meeting). If your chair does not require an exposé, simply do not use `document = expose`. |
 | Chapter structure | `chapters/`, `main.tex` | The chapters follow a typical structure for theses that build and evaluate an artifact. Rename, merge, or remove chapters as agreed with your supervisor, and update the thesis structure at the end of the introduction. |
 | Declaration and AI use | `backmatter/` | Check the declaration text and the rules for documenting AI use against your examination regulations and your examiner's requirements. |
@@ -160,10 +160,10 @@ adapt the chapter structure to your thesis together with your supervisor.
   title      = {The Title of Your Thesis},
   title-de   = {Der Titel Ihrer Arbeit},
   author     = {Your Name},
-  program    = {Informatics},
-  examiner   = {Prof.\ Dr.\ Ingo Weber},
-  supervisor = {Dr.\ Sandro Speth},
-  supervisor = {Second Supervisor, M.Sc.},  % optional: shows "Supervisors"
+  program    = informatics,  % predefined key or free text
+  examiner   = weber,        % predefined key or free text
+  supervisor = speth,
+  supervisor = stiehle,      % optional: shows "Supervisors"
   start-date = {May 15, 2026},
   end-date   = {November 15, 2026},
   school     = {TUM School of Computation, Information and Technology},
@@ -175,6 +175,30 @@ adapt the chapter structure to your thesis together with your supervisor.
 
 - Repeat `supervisor` for every supervisor. With more than one, the label changes from
   *Supervisor* to *Supervisors*.
+- `examiner` and `supervisor` accept a key of a predefined person or any name as free text,
+  e.g., `supervisor = {Jane Doe, M.Sc.}`. The members of ISDO are predefined in `people.tex`,
+  e.g., `weber` for Prof. Dr. Ingo Weber and `speth` for Dr. Sandro Speth; see that file for all
+  keys. Add people with `\TUMdefineperson{key}{Name with titles}`. In the text,
+  `\TUMperson{key}` prints the name, e.g., in the acknowledgments.
+- `program` accepts a key of a predefined study program or any name as free text. The name is
+  printed in the language of the thesis:
+
+  | Key | English | German |
+  |-----|---------|--------|
+  | `informatics` | Informatics | Informatik |
+  | `games-engineering` | Informatics: Games Engineering | Informatik: Games Engineering |
+  | `information-systems` | Information Systems | Wirtschaftsinformatik |
+  | `bioinformatics` | Bioinformatics | Bioinformatik |
+  | `information-engineering` | Information Engineering | Information Engineering |
+  | `rci` | Robotics, Cognition, Intelligence | Robotics, Cognition, Intelligence |
+  | `cse` | Computational Science and Engineering | Computational Science and Engineering |
+  | `dea` | Data Engineering and Analytics | Data Engineering and Analytics |
+  | `biomedical-computing` | Biomedical Computing | Biomedical Computing |
+  | `ai-in-biomedicine` | AI in Biomedicine | AI in Biomedicine |
+  | `software-engineering` | Software Engineering (Elite Graduate Program) | Software Engineering (Eliteprogramm) |
+  | `fim` | Finance and Information Management | Finance and Information Management |
+
+  Add programs with `\TUMdefineprogram{key}{English name}{German name}`, e.g., in `people.tex`.
 - Empty or omitted fields (e.g., `department`) are not shown.
 - The TUM logo is read from `logos/tum-logo.pdf` (key `logo`).
 - The values are also used for the PDF metadata and the declaration.
@@ -255,7 +279,8 @@ colored links, citation style.
 ```text
 main.tex              Thesis information and document structure
 settings.tex          Packages and layout
-tumthesis.sty         Title page, labels, colors, and signature block
+tumthesis.sty         Title page, labels, colors, study programs, and signature block
+people.tex            Predefined examiners and supervisors (ISDO)
 acronyms.tex          Acronyms
 bibliography.bib      References
 expose/               Exposé sections

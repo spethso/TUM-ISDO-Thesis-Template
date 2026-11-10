@@ -34,7 +34,8 @@ declaration that they wrote it independently. Therefore:
 |------|---------|
 | `main.tex` | Thesis data (`\TUMsetup{...}`) and document order. `document = thesis` or `document = expose` switches between thesis and exposé. |
 | `settings.tex` | Packages, layout, and helper commands. Change only when asked. |
-| `tumthesis.sty` | Title page, labels, colors, signature block. Change only when asked. |
+| `tumthesis.sty` | Title page, labels, colors, predefined study programs, signature block. Change only when asked. |
+| `people.tex` | Predefined examiners and supervisors (keys such as `weber`, `speth` for `\TUMsetup`). |
 | `frontmatter/` | Abstract, Kurzzusammenfassung (German abstract), acknowledgments |
 | `chapters/` | Thesis chapters (`01-introduction.tex` to `09-conclusion.tex`) |
 | `expose/` | Exposé sections (Motivation, Methodology, Planned Use of (Generative) AI, Evaluation, Timeline & Risks) |

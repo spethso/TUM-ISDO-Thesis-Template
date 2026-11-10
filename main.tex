@@ -32,6 +32,7 @@
 
 \usepackage{babel}
 \usepackage{tumthesis}
+\input{people} % predefined examiners and supervisors (keys such as weber, speth)
 
 % =================================================================================
 % TODO: thesis information
@@ -46,10 +47,15 @@
   title      = {The Title of Your Thesis},
   title-de   = {Der Titel Ihrer Arbeit}, % use title-en instead for a German thesis
   author     = {Your Name},
-  program    = {Informatics},
-  examiner   = {Prof.\ Dr.\ Ingo Weber},
-  supervisor = {Dr.\ Sandro Speth},
-  % supervisor = {Second Supervisor, M.Sc.}, % repeat for more supervisors -> "Supervisors"
+  % Course of study: a predefined key or free text. Keys: informatics, games-engineering,
+  % information-systems, bioinformatics, information-engineering, rci, cse, dea,
+  % biomedical-computing, ai-in-biomedicine, software-engineering, fim
+  program    = informatics,
+  % Examiner and supervisors: a key from people.tex (weber, speth, weytjens, bayer, stiehle,
+  % witte, zuieva) or free text, e.g., {Prof.\ Dr.\ Jane Doe}
+  examiner   = weber,
+  supervisor = speth,
+  % supervisor = stiehle, % repeat for more supervisors -> "Supervisors"
   start-date = {May 15, 2026},       % not shown on the exposé
   end-date   = {November 15, 2026},  % not shown on the exposé
   % Organizational unit shown on the title page

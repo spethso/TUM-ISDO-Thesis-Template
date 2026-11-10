@@ -11,9 +11,9 @@
 %     title      = {Title of the Thesis},
 %     title-de   = {Titel der Arbeit}, % second title in the other language (optional)
 %     author     = {Your Name},
-%     program    = {Informatics},
-%     examiner   = {Prof.\ Dr.\ Ingo Weber},
-%     supervisor = {Dr.\ Sandro Speth},
+%     program    = informatics,       % predefined key (see \TUMdefineprogram) or free text
+%     examiner   = weber,             % key from people.tex or free text
+%     supervisor = speth,
 %     supervisor = {Second Supervisor, M.Sc.},  % repeat the key for several supervisors
 %     start-date = {May 15, 2026},
 %     end-date   = {November 15, 2026},
@@ -187,12 +187,51 @@
 
 \NewDocumentCommand \TUMsetup { m } { \keys_set:nn { tumthesis } {#1} }
 
+% ---------------------------------------------------------------------------------
+% Predefined people and study programs
+%   \TUMdefineperson{<key>}{<name with titles>}          e.g., in people.tex
+%   \TUMdefineprogram{<key>}{<English name>}{<German name>}
+% In \TUMsetup, examiner, supervisor, and program accept such a key or any free text.
+% \TUMperson{<key>} returns the name of a predefined person, e.g., for the acknowledgments.
+% ---------------------------------------------------------------------------------
+\NewDocumentCommand \TUMdefineperson { m m }
+  { \cs_gset:cpn { __tum_person_ \tl_to_str:n {#1} : } {#2} }
+\NewDocumentCommand \TUMdefineprogram { m m m }
+  {
+    \cs_gset:cpn { __tum_program_english_ \tl_to_str:n {#1} : } {#2}
+    \cs_gset:cpn { __tum_program_german_ \tl_to_str:n {#1} : } {#3}
+  }
+% Resolve a key, or return the text unchanged if it is not a key
+\cs_new:Npn \__tum_person:n #1
+  { \cs_if_exist_use:cF { __tum_person_ \tl_to_str:n {#1} : } { \exp_not:n {#1} } }
+\cs_new:Npn \__tum_program:n #1
+  {
+    \cs_if_exist_use:cF { __tum_program_ \__tum_language: _ \tl_to_str:n {#1} : }
+      { \exp_not:n {#1} }
+  }
+\NewExpandableDocumentCommand \TUMperson { m } { \__tum_person:n {#1} }
+
+% Study programs of the TUM School of Computation, Information and Technology in computer
+% science (names as on https://www.cit.tum.de/en/cit/studies/degree-programs/)
+\TUMdefineprogram{informatics}{Informatics}{Informatik}
+\TUMdefineprogram{games-engineering}{Informatics:~Games~Engineering}{Informatik:~Games~Engineering}
+\TUMdefineprogram{information-systems}{Information~Systems}{Wirtschaftsinformatik}
+\TUMdefineprogram{bioinformatics}{Bioinformatics}{Bioinformatik}
+\TUMdefineprogram{information-engineering}{Information~Engineering}{Information~Engineering}
+\TUMdefineprogram{rci}{Robotics,~Cognition,~Intelligence}{Robotics,~Cognition,~Intelligence}
+\TUMdefineprogram{cse}{Computational~Science~and~Engineering}{Computational~Science~and~Engineering}
+\TUMdefineprogram{dea}{Data~Engineering~and~Analytics}{Data~Engineering~and~Analytics}
+\TUMdefineprogram{biomedical-computing}{Biomedical~Computing}{Biomedical~Computing}
+\TUMdefineprogram{ai-in-biomedicine}{AI~in~Biomedicine}{AI~in~Biomedicine}
+\TUMdefineprogram{software-engineering}{Software~Engineering~(Elite~Graduate~Program)}{Software~Engineering~(Eliteprogramm)}
+\TUMdefineprogram{fim}{Finance~and~Information~Management}{Finance~and~Information~Management}
+
 % Getters
 \NewExpandableDocumentCommand \TUMtitle        { } { \l__tum_title_tl }
 \NewExpandableDocumentCommand \TUMsecondtitle  { } { \l__tum_titlesecond_tl }
 \NewExpandableDocumentCommand \TUMauthor       { } { \l__tum_author_tl }
-\NewExpandableDocumentCommand \TUMprogram      { } { \l__tum_program_tl }
-\NewExpandableDocumentCommand \TUMexaminer     { } { \l__tum_examiner_tl }
+\NewExpandableDocumentCommand \TUMprogram      { } { \exp_args:NV \__tum_program:n \l__tum_program_tl }
+\NewExpandableDocumentCommand \TUMexaminer     { } { \exp_args:NV \__tum_person:n \l__tum_examiner_tl }
 \NewExpandableDocumentCommand \TUMstartdate    { } { \l__tum_startdate_tl }
 \NewExpandableDocumentCommand \TUMenddate      { } { \l__tum_enddate_tl }
 \NewExpandableDocumentCommand \TUMuniversity   { } { \l__tum_university_tl }
@@ -225,7 +264,10 @@
 
 % Supervisors, one per line, and the matching label (singular or plural)
 \NewDocumentCommand \TUMsupervisors { }
-  { \seq_use:Nn \l__tum_supervisors_seq { \\ } }
+  {
+    \seq_set_map:NNn \l_tmpa_seq \l__tum_supervisors_seq { \__tum_person:n {##1} }
+    \seq_use:Nn \l_tmpa_seq { \\ }
+  }
 \NewExpandableDocumentCommand \TUMsupervisorlabel { }
   {
     \int_compare:nNnTF { \seq_count:N \l__tum_supervisors_seq } > { 1 }
