@@ -15,8 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Switch the document in main.tex. Git ignores this edit, so the draft footer shows the
+      # commit without the "+" that marks uncommitted changes.
       - name: Select the ${{ matrix.document }}
-        run: sed -i -E 's/^([[:space:]]*document[[:space:]]*=[[:space:]]*)[a-z]+/\1${{ matrix.document }}/' main.tex
+        run: |
+          sed -i -E 's/^([[:space:]]*document[[:space:]]*=[[:space:]]*)[a-z]+/\1${{ matrix.document }}/' main.tex
+          git update-index --assume-unchanged main.tex
 
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
